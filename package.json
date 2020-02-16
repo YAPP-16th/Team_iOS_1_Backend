@@ -2,12 +2,14 @@
   "name": "Team_iOS_1_Backend",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/SimJunSik/Team_iOS_1_Backend.git",
+  "repository": "https://github.com/YAPP-16th/Team_iOS_1_Backend.git",
+  "description": "YAPP 16기 iOS 1팀",
   "author": "SimJunSik <wnstlr24@naver.com>",
   "license": "MIT",
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts",
     "dev": "cross-env NODE_ENV=develop nodemon src/index.ts",
+    "build": "tsc -p .",
     "test": "exit"
   },
   "dependencies": {

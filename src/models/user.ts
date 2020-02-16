@@ -1,8 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, model, Document } from 'mongoose';
 
-const { Schema } = mongoose;
+export type UserDocument = Document & {
+  userId: String;
+  password: String;
+  joinedDate: Date;
+};
 
-const UserSchema = new Schema({
+const UserSchema: Schema = new Schema({
   userId: String,
   password: String,
   joinedDate: {
@@ -11,5 +15,5 @@ const UserSchema = new Schema({
   },
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = model<UserDocument>('User', UserSchema);
 export default User;
