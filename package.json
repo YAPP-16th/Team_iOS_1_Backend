@@ -9,6 +9,7 @@
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts",
     "dev": "cross-env NODE_ENV=develop nodemon src/index.ts",
+    "prod": "cross-env NODE_ENV=develop nodemon src/index.ts",
     "build": "tsc -p .",
     "test": "exit"
   },
