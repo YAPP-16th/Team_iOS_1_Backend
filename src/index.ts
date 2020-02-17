@@ -10,8 +10,8 @@ import mongoose from 'mongoose';
 
 import api from './api';
 
-if (process.env.NODE_ENV === 'production') {
-  dotenv.config({ path: path.join(__dirname, '../env/.env.production') });
+if (process.env.NODE_ENV === 'prod') {
+  dotenv.config({ path: path.join(__dirname, '../env/.env.prod') });
 } else if (process.env.NODE_ENV === 'develop') {
   dotenv.config({ path: path.join(__dirname, '../env/.env.dev') });
 } else {
@@ -24,14 +24,14 @@ const { PORT } = process.env;
 const MONGO_URI = process.env.MONGO_URI!;
 
 // DB
-// mongoose
-//   .connect(MONGO_URI, { useNewUrlParser: true, useFindAndModify: false })
-//   .then(() => {
-//     console.log('Connected to MongoDB');
-//   })
-//   .catch((e: Error) => {
-//     console.error(e);
-//   });
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true, useFindAndModify: false })
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((e: Error) => {
+    console.error(e);
+  });
 
 // 라우터 설정
 router.use('/api', api.routes());
