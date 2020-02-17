@@ -21,6 +21,9 @@ deploy: # 배포
     acl: private
     local_dir: deploy # deploy 디렉터리에 있는 파일을 s3로 업로드 하겠다는 의미
     wait-until-deployed: true
+    on:
+      repo: YAPP-16th/Team_iOS_1_Backend
+      branch: develop
 
   - provider: codedeploy # AWS CodeDeploy를 의미
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
@@ -32,6 +35,9 @@ deploy: # 배포
     deployment_group: team-ios-1-deploy-group # AWS 배포 애플리케이션에 만들어져 있는 배포 그룹
     region: ap-northeast-2
     wait-until-deployed: true
+    on:
+      repo: YAPP-16th/Team_iOS_1_Backend
+      branch: develop
 
 notifications:
   email:
