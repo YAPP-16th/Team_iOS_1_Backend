@@ -24,14 +24,14 @@ const { PORT } = process.env;
 const MONGO_URI = process.env.MONGO_URI!;
 
 // DB
-mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useFindAndModify: false })
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((e: Error) => {
-    console.error(e);
-  });
+// mongoose
+//   .connect(MONGO_URI, { useNewUrlParser: true, useFindAndModify: false })
+//   .then(() => {
+//     console.log('Connected to MongoDB');
+//   })
+//   .catch((e: Error) => {
+//     console.error(e);
+//   });
 
 // 라우터 설정
 router.use('/api', api.routes());
