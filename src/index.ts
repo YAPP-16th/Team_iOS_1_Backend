@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
 const app = new Koa();
 const router = new Router();
 const { PORT } = process.env;
-const MONGO_URI: string = process.env.MONGO_URI!;
+const MONGO_URI = process.env.MONGO_URI!;
 
 // DB
 mongoose
