@@ -3,6 +3,7 @@ node_js:
   - '12.16'
 before_install:
   - npm install -g yarn
+  - npm install -g typescript
 branches:
   only:
     - develop
