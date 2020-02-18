@@ -10,8 +10,8 @@ import mongoose from 'mongoose';
 
 import api from './api';
 
-if (process.env.NODE_ENV === 'production') {
-  dotenv.config({ path: path.join(__dirname, '../env/.env.production') });
+if (process.env.NODE_ENV === 'prod') {
+  dotenv.config({ path: path.join(__dirname, '../env/.env.prod') });
 } else if (process.env.NODE_ENV === 'develop') {
   dotenv.config({ path: path.join(__dirname, '../env/.env.dev') });
 } else {
