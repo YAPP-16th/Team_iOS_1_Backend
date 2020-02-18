@@ -18,8 +18,8 @@
 - Nodejs-v12.16.0
 - Koa
 - es6
+- MongoDB
 - AWS EC2
-- AWS RDS MongoDB
 - AWS S3
 - AWS CodeDeploy
 - Travis

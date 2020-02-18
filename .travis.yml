@@ -23,7 +23,7 @@ deploy: # 배포
     local_dir: deploy # deploy 디렉터리에 있는 파일을 s3로 업로드 하겠다는 의미
     wait-until-deployed: true
     on:
-      repo: SimJunSik/Team_iOS_1_Backend
+      repo: YAPP-16th/Team_iOS_1_Backend
       branch: develop
 
   - provider: codedeploy # AWS CodeDeploy를 의미
@@ -37,7 +37,7 @@ deploy: # 배포
     region: ap-northeast-2
     wait-until-deployed: true
     on:
-      repo: SimJunSik/Team_iOS_1_Backend
+      repo: YAPP-16th/Team_iOS_1_Backend
       branch: develop
 
 notifications:
