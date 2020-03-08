@@ -21,7 +21,9 @@
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.1",
     "koa-router": "^8.0.8",
-    "mongoose": "^5.9.1"
+    "koa2-swagger-ui": "^2.16.0",
+    "mongoose": "^5.9.1",
+    "swagger-jsdoc": "^3.5.0"
   },
   "devDependencies": {
     "@types/koa": "^2.11.1",
@@ -31,6 +33,7 @@
     "@types/koa-router": "^7.4.0",
     "@types/mongoose": "^5.7.1",
     "@types/node": "^13.7.1",
+    "@types/swagger-jsdoc": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^2.19.2",
     "@typescript-eslint/parser": "^2.19.2",
     "eslint": "^6.8.0",
