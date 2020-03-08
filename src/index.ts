@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === 'prod') {
 
 const app = new Koa();
 const router = new Router();
-const { PORT } = process.env;
+const { PORT, SWAGGER_URI } = process.env;
 const MONGO_URI = process.env.MONGO_URI!;
 
 // DB
@@ -47,8 +47,6 @@ const swaggerDefinition = {
     version: '1.0.0', // Version (required)
     description: '곳감 API', // Description (optional)
   },
-  host: `localhost:3000`,
-  basePath: '/api/v1',
   schemes: ['http'],
 };
 const options = {
@@ -71,7 +69,7 @@ app.use(
   koaSwagger({
     routePrefix: '/swagger',
     swaggerOptions: {
-      url: 'http://localhost:3000/swagger.json',
+      url: SWAGGER_URI,
     },
   }),
 );
