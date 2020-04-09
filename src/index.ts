@@ -1,3 +1,4 @@
+process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'prod' ) ? 'prod' : 'develop';
 import path from 'path';
 import dotenv from 'dotenv';
 
