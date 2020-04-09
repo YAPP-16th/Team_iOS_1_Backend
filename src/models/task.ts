@@ -1,11 +1,11 @@
 import {Document, Schema, model} from 'mongoose'
 
+//coordinates 다른 자료 참고하기를 바람.
+
 export type TaskDocument = Document & {
     title: String;
-    //위도 경도 저장
-    coordinates: [Number, Number]
-    //tags 배열로 담는거에요?
-    tags: String;
+    coordinates: [Number, Number];
+    tags: [String];
     memo: String;
     iconURL: String;
     isFinished: Boolean;
