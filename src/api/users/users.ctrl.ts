@@ -1,17 +1,44 @@
 import { Context } from 'koa';
+import { UserDocument } from '../../models/user';
 import User from '../../models/user';
+import {createToken} from '../../lib/token';
+import { verify } from '../../lib/googleAuth';
 // import mongoose from 'mongoose';
 
 /* 유저 생성
 POST /api/users
-{ userId, password }
+{
+  userId 
+  nickname
+  profileImageUrl
+}
 */
 export const write = async (ctx: Context) => {
-  const { userId, password } = ctx.request.body;
-  const user = new User({
+
+  const {idtoken} = ctx.request.body;
+  const payload = await verify(idtoken);
+  
+  if(!payload){
+    console.log('Invalid token');
+    ctx.status = 401;
+    return;
+  }
+  
+  const {
+    email: userId,
+    name: nickname,
+    picture : profileImageUrl
+  } = payload;
+
+  const token = await createToken(userId);
+
+  const user : UserDocument = new User({
     userId,
-    password,
-  });
+    nickname,
+    profileImageUrl,
+    token
+  })
+
   try {
     await user.save();
     ctx.body = user;
