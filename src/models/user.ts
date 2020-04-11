@@ -28,7 +28,7 @@ const UserSchema: Schema = new Schema({
   taskIds: [
     {
       type: ObjectId,
-      required: true,
+      required: false,
       ref: 'Task',
     }
   ],
