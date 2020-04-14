@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-export const createToken = async (value: string  | undefined='') => {
+export const createToken = async (value: string) => {
   const key = await new Promise((resolve, reject) => {
     crypto.randomBytes(64, (err, buf) => {
       crypto.pbkdf2(

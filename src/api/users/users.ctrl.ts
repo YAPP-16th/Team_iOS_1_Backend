@@ -5,46 +5,56 @@ import {createToken} from '../../lib/token';
 import { verify } from '../../lib/googleAuth';
 // import mongoose from 'mongoose';
 
-/* 유저 생성
+/* 유저 조회 및 생성
 POST /api/users
-{
-  userId 
-  nickname
-  profileImageUrl
-}
+{id, email, idtoken}
 */
-export const write = async (ctx: Context) => {
+export const googleLogin = async (ctx: Context) => {
 
-  const {idtoken} = ctx.request.body;
+
+  const {id, email, idtoken} = ctx.request.body;
   const payload = await verify(idtoken);
   
+  console.log(ctx.request.body);
   if(!payload){
-    console.log('Invalid token');
     ctx.status = 401;
     return;
   }
   
   const {
+    sub : googleId,
     email: userId,
     name: nickname,
     picture : profileImageUrl
   } = payload;
 
-  const token = await createToken(userId);
+  if(id !== googleId || email !== userId){
+    ctx.status = 401;
+    return;
+  }
+
+  const token = await createToken(userId!);
 
   const user : UserDocument = new User({
+    googleId,
     userId,
     nickname,
     profileImageUrl,
     token
   })
 
-  try {
-    await user.save();
-    ctx.body = user;
-  } catch (e) {
-    ctx.throw(500, e);
-  }
+  await user.save((e ,result)=>{
+    if(!e){
+      ctx.status = 201;
+      ctx.body = result;
+    }else if(e && e.code === 11000){
+      ctx.status = 200;
+    }else if(e && e.code !== 11000){
+      ctx.throw(500, e);
+    }  
+    ctx.body = result;
+  });
+
 };
 
 /* 유저 목록 조회
