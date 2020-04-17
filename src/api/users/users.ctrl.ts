@@ -11,20 +11,21 @@ POST /api/users
 */
 export const googleLogin = async (ctx: Context) => {
 
-  let checkUser;
   const {id, email, idtoken} = ctx.request.body;
 
   try{
-    checkUser = await User.findOne({userId: email});
+    const checkUser = await User.findOne({userId: email});
+
+    if(checkUser){
+      ctx.status = 200;
+      ctx.body = checkUser;
+    }
+    
   }catch(e){
     ctx.throw(500,e);
   }
 
-  if(checkUser){
-    ctx.status = 200;
-    ctx.body = checkUser;
-    return;
-  }
+
 
   const payload = await verify(idtoken);
   
