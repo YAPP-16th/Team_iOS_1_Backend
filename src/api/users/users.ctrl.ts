@@ -11,11 +11,23 @@ POST /api/users
 */
 export const googleLogin = async (ctx: Context) => {
 
-
+  let checkUser;
   const {id, email, idtoken} = ctx.request.body;
+
+  try{
+    checkUser = await User.findOne({userId: email});
+  }catch(e){
+    ctx.throw(500,e);
+  }
+
+  if(checkUser){
+    ctx.status = 200;
+    ctx.body = checkUser;
+    return;
+  }
+
   const payload = await verify(idtoken);
   
-  console.log(ctx.request.body);
   if(!payload){
     ctx.status = 401;
     return;
@@ -36,25 +48,19 @@ export const googleLogin = async (ctx: Context) => {
   const token = await createToken(userId!);
 
   const user : UserDocument = new User({
-    googleId,
     userId,
     nickname,
     profileImageUrl,
     token
   })
 
-  await user.save((e ,result)=>{
-    if(!e){
-      ctx.status = 201;
-      ctx.body = result;
-    }else if(e && e.code === 11000){
-      ctx.status = 200;
-    }else if(e && e.code !== 11000){
-      ctx.throw(500, e);
-    }  
-    ctx.body = result;
-  });
-
+  try{
+    await user.save();
+    ctx.status = 201;
+    ctx.body = user;
+  }catch(e){
+    ctx.throw(500,e);
+  }
 };
 
 /* 유저 목록 조회
