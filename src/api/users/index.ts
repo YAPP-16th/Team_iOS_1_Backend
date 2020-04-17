@@ -4,6 +4,6 @@ import * as usersCtrl from './users.ctrl';
 const users = new Router();
 
 users.get('/', usersCtrl.list);
-users.post('/', usersCtrl.write);
+users.post('/', usersCtrl.googleLogin);
 
 export default users;

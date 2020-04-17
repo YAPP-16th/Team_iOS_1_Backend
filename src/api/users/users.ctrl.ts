@@ -1,22 +1,65 @@
 import { Context } from 'koa';
+import { UserDocument } from '../../models/user';
 import User from '../../models/user';
+import {createToken} from '../../lib/token';
+import { verify } from '../../lib/googleAuth';
 // import mongoose from 'mongoose';
 
-/* 유저 생성
+/* 유저 조회 및 생성
 POST /api/users
-{ userId, password }
+{id, email, idtoken}
 */
-export const write = async (ctx: Context) => {
-  const { userId, password } = ctx.request.body;
-  const user = new User({
+export const googleLogin = async (ctx: Context) => {
+
+  const {id, email, idtoken} = ctx.request.body;
+
+  try{
+    const checkUser = await User.findOne({userId: email});
+
+    if(checkUser){
+      ctx.status = 200;
+      ctx.body = checkUser;
+      return;
+    }
+    
+  }catch(e){
+    ctx.throw(500,e);
+  }
+
+  const payload = await verify(idtoken);
+  
+  if(!payload){
+    ctx.status = 401;
+    return;
+  }
+  
+  const {
+    sub : googleId,
+    email: userId,
+    name: nickname,
+    picture : profileImageUrl
+  } = payload;
+
+  if(id !== googleId || email !== userId){
+    ctx.status = 401;
+    return;
+  }
+
+  const token = await createToken(userId!);
+
+  const user : UserDocument = new User({
     userId,
-    password,
-  });
-  try {
+    nickname,
+    profileImageUrl,
+    token
+  })
+
+  try{
     await user.save();
+    ctx.status = 201;
     ctx.body = user;
-  } catch (e) {
-    ctx.throw(500, e);
+  }catch(e){
+    ctx.throw(500,e);
   }
 };
 
