@@ -19,13 +19,12 @@ export const googleLogin = async (ctx: Context) => {
     if(checkUser){
       ctx.status = 200;
       ctx.body = checkUser;
+      return;
     }
     
   }catch(e){
     ctx.throw(500,e);
   }
-
-
 
   const payload = await verify(idtoken);
   
