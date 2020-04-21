@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Model } from 'mongoose';
 export const ObjectId = Schema.Types.ObjectId;
 
 export type UserDocument = Document & {
@@ -14,15 +14,15 @@ const UserSchema: Schema = new Schema({
   userId: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   nickname: {
     type: String,
-    required: true
+    required: true,
   },
   profileImageUrl: {
     type: String,
-    required: true
+    required: true,
     //deafult : 디폴트 이미지
   },
   taskIds: [
@@ -30,17 +30,32 @@ const UserSchema: Schema = new Schema({
       type: ObjectId,
       required: false,
       ref: 'Task',
-    }
+    },
   ],
   token: {
     type: String,
-    required: true
+    required: true,
   },
   joinedDate: {
-    type:Date,
-    default:Date.now
-  }
+    type: Date,
+    default: Date.now,
+  },
 });
 
-const User = model<UserDocument>('User', UserSchema);
+// static method
+UserSchema.statics.findByUserId = function (userId: string) {
+  return this.findOne({ userId });
+};
+
+// static method
+UserSchema.statics.findByToken = function (token: string) {
+  return this.findOne({ token });
+};
+
+export interface UserModel extends Model<UserDocument> {
+  findByUserId(userId: string): Promise<UserDocument>;
+  findByToken(token: string): Promise<UserDocument>;
+}
+
+const User = model<UserDocument, UserModel>('User', UserSchema);
 export default User;
