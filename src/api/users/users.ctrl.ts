@@ -63,7 +63,10 @@ export const googleLogin = async (ctx: Context) => {
   try {
     await user.save();
     ctx.status = 201;
-    ctx.body = user;
+    ctx.body = {
+      description: 'Successed googleAuth',
+      user: user,
+    };
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -90,7 +93,11 @@ export const userInfo = async (ctx: Context) => {
     const userJSON = user.toJSON();
     delete userJSON.token;
 
-    ctx.body = userJSON;
+    ctx.status = 200;
+    ctx.body = {
+      description: 'Successed get user info',
+      user: userJSON,
+    };
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -112,11 +119,17 @@ export const updateUser = async (ctx: Context) => {
 
     if (!user) {
       ctx.status = 404;
+      ctx.body = {
+        description: 'Not found user',
+      };
       return;
     }
 
     ctx.status = 200;
-    ctx.body = user;
+    ctx.body = {
+      description: 'Successed modify user info',
+      user: user,
+    };
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -138,7 +151,7 @@ export const secession = async (ctx: Context) => {
   }
 
   try {
-    const user = await User.findOneAndRemove({ email: userId }).exec();
+    const user = await User.findOneAndRemove({ userId }).exec();
 
     if (!user) {
       ctx.status = 404;
@@ -149,6 +162,10 @@ export const secession = async (ctx: Context) => {
     }
 
     ctx.status = 204;
+    ctx.body = {
+      description: 'Successed secession user',
+      user: user,
+    };
   } catch (e) {
     ctx.throw(500, e);
   }
