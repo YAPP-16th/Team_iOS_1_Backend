@@ -1,11 +1,18 @@
 import { Schema, model, Document, Model } from 'mongoose';
-export const ObjectId = Schema.Types.ObjectId;
+import Frequent, { FrequentDocument, FrequentSchema } from './frequent';
+
+const ObjectId = Schema.Types.ObjectId;
+
+const arrayLimit = (frequents: Array<FrequentDocument>) => {
+  return frequents.length <= 5;
+};
 
 export type UserDocument = Document & {
   userId: String;
   nickname: String;
   profileImageUrl: String;
   taskIds: [String];
+  frequents: [FrequentDocument];
   token: String;
   joinedDate: Date;
 };
@@ -32,6 +39,15 @@ const UserSchema: Schema = new Schema({
       ref: 'Task',
     },
   ],
+  frequents: {
+    type: [
+      {
+        type: FrequentSchema,
+        required: false,
+      },
+    ],
+    validate: [arrayLimit, '{PATH} exceeds the limit of 5'],
+  },
   token: {
     type: String,
     required: true,
@@ -42,17 +58,24 @@ const UserSchema: Schema = new Schema({
   },
 });
 
-// static method
+// instance methods
+UserSchema.methods.getFrequents = function () {
+  return this.frequents;
+};
+
+// static methods
 UserSchema.statics.findByUserId = function (userId: string) {
   return this.findOne({ userId });
 };
 
-// static method
 UserSchema.statics.findByToken = function (token: string) {
   return this.findOne({ token });
 };
 
 export interface UserModel extends Model<UserDocument> {
+  // instance methods
+  getFrequents(): Array<FrequentDocument>;
+  // static methods
   findByUserId(userId: string): Promise<UserDocument>;
   findByToken(token: string): Promise<UserDocument>;
 }
