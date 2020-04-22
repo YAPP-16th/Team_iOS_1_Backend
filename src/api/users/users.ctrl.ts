@@ -1,65 +1,173 @@
 import { Context } from 'koa';
 import { UserDocument } from '../../models/user';
 import User from '../../models/user';
-import {createToken} from '../../lib/token';
+import { createToken } from '../../lib/token';
 import { verify } from '../../lib/googleAuth';
-// import mongoose from 'mongoose';
 
-/* 유저 조회 및 생성
+/* googleAuth 기반 회원가입
 POST /api/users
-{id, email, idtoken}
+{ id, email, idtoken }
 */
 export const googleLogin = async (ctx: Context) => {
+  const { id, email, idtoken } = ctx.request.body;
 
-  const {id, email, idtoken} = ctx.request.body;
+  try {
+    const checkUser = await User.findOne({ userId: email }).exec();
 
-  try{
-    const checkUser = await User.findOne({userId: email});
-
-    if(checkUser){
-      ctx.status = 200;
-      ctx.body = checkUser;
+    if (checkUser) {
+      ctx.status = 409;
+      ctx.body = {
+        description: 'Already Signed up user',
+        user: checkUser,
+      };
       return;
     }
-    
-  }catch(e){
-    ctx.throw(500,e);
+  } catch (e) {
+    ctx.throw(500, e);
   }
 
   const payload = await verify(idtoken);
-  
-  if(!payload){
+
+  if (!payload) {
     ctx.status = 401;
+    ctx.body = {
+      description: 'Invalid idtoken',
+    };
     return;
   }
-  
+
   const {
-    sub : googleId,
+    sub: googleId,
     email: userId,
     name: nickname,
-    picture : profileImageUrl
+    picture: profileImageUrl,
   } = payload;
 
-  if(id !== googleId || email !== userId){
+  if (id !== googleId || email !== userId) {
     ctx.status = 401;
+    ctx.body = {
+      description: 'Mismatch between idtoken information and id, email',
+    };
     return;
   }
 
   const token = await createToken(userId!);
 
-  const user : UserDocument = new User({
+  const user: UserDocument = new User({
     userId,
     nickname,
     profileImageUrl,
-    token
-  })
+    token,
+  });
 
-  try{
+  try {
     await user.save();
     ctx.status = 201;
-    ctx.body = user;
-  }catch(e){
-    ctx.throw(500,e);
+    ctx.body = {
+      description: 'Successed googleAuth',
+      user: user,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+/* 특정 유저 정보 조회
+GET /api/users/:userId
+*/
+export const userInfo = async (ctx: Context) => {
+  const { userId } = ctx.params;
+
+  try {
+    const user = await User.findByUserId(userId);
+
+    if (!user) {
+      ctx.status = 404;
+      ctx.body = {
+        description: 'Not found user',
+      };
+      return;
+    }
+
+    // 다른 사람의 token을 함부로 볼 수 없게 하기 위한 처리
+    const userJSON = user.toJSON();
+    delete userJSON.token;
+
+    ctx.status = 200;
+    ctx.body = {
+      description: 'Successed get user info',
+      user: userJSON,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+/* 유저 정보 수정
+PATCH /api/users/:userId
+{ 수정할필드1, 수정할필드2, ... }
+*/
+export const updateUser = async (ctx: Context) => {
+  const { userId } = ctx.params;
+
+  const newData = { ...ctx.request.body };
+
+  try {
+    const user = await User.findOneAndUpdate({ userId }, newData, {
+      new: true,
+    }).exec();
+
+    if (!user) {
+      ctx.status = 404;
+      ctx.body = {
+        description: 'Not found user',
+      };
+      return;
+    }
+
+    ctx.status = 200;
+    ctx.body = {
+      description: 'Successed modify user info',
+      user: user,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+/* 유저 회원탈퇴
+DELETE /api/users/:userId
+*/
+export const secession = async (ctx: Context) => {
+  const { userId } = ctx.params;
+  const requestUser = ctx.state.user;
+
+  if (userId !== requestUser.userId) {
+    ctx.status = 401;
+    ctx.body = {
+      description: 'Mismatch between token information and userId',
+    };
+    return;
+  }
+
+  try {
+    const user = await User.findOneAndRemove({ userId }).exec();
+
+    if (!user) {
+      ctx.status = 404;
+      ctx.body = {
+        description: 'Not found user',
+      };
+      return;
+    }
+
+    ctx.status = 204;
+    ctx.body = {
+      description: 'Successed secession user',
+      user: user,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
   }
 };
 
