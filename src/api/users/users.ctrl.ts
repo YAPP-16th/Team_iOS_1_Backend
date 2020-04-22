@@ -15,7 +15,7 @@ export const googleLogin = async (ctx: Context) => {
     const checkUser = await User.findOne({ userId: email }).exec();
 
     if (checkUser) {
-      ctx.status = 200;
+      ctx.status = 409;
       ctx.body = {
         description: 'Already Signed up user',
         user: checkUser,
