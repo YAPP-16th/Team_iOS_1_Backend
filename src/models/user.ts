@@ -58,11 +58,6 @@ const UserSchema: Schema = new Schema({
   },
 });
 
-// instance methods
-UserSchema.methods.getFrequents = function () {
-  return this.frequents;
-};
-
 // static methods
 UserSchema.statics.findByUserId = function (userId: string) {
   return this.findOne({ userId });
@@ -73,8 +68,6 @@ UserSchema.statics.findByToken = function (token: string) {
 };
 
 export interface UserModel extends Model<UserDocument> {
-  // instance methods
-  getFrequents(): Array<FrequentDocument>;
   // static methods
   findByUserId(userId: string): Promise<UserDocument>;
   findByToken(token: string): Promise<UserDocument>;
