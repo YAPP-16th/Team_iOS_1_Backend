@@ -32,13 +32,11 @@ const UserSchema: Schema = new Schema({
     required: true,
     //deafult : 디폴트 이미지
   },
-  taskIds: [
-    {
-      type: ObjectId,
-      required: false,
-      ref: 'Task',
-    },
-  ],
+  taskIds: {
+    type: [ObjectId],
+    required: false,
+    ref: 'Task',
+  },
   frequents: {
     type: [
       {
