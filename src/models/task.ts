@@ -25,7 +25,7 @@ const TaskSchema: Schema = new Schema({
         required: true
     },
     tags:{
-        type: String,
+        type: [String],
         required: false
     },
     memo:{
