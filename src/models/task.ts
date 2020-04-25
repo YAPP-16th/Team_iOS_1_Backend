@@ -1,51 +1,60 @@
-import {Document, Schema, model} from 'mongoose'
-
-//coordinates 다른 자료 참고하기를 바람.
+import { Document, Schema, model } from 'mongoose';
 
 export type TaskDocument = Document & {
-    title: String;
-    coordinates: [Number, Number];
-    tags: [String];
-    memo: String;
-    iconURL: String;
-    isFinished: Boolean;
-    dueDate: Date;
+  title: String;
+  coordinates: [Number, Number];
+  address: String;
+  tags: String;
+  memo: String;
+  iconURL: String;
+  isFinished: Boolean;
+  createdDate: Date;
+  dueDate: Date;
 };
 
 const TaskSchema: Schema = new Schema({
-    title:{
-        type: String,
-        required: false,
-        // 어플의 방향성에 맞게 Random default title 필요.
-        default : 'untitled'
-    },
-    coordinates:{
-        type: [Number, Number],
-        //좌표값은 필수 
-        required: true
-    },
-    tags:{
-        type: [String],
-        required: false
-    },
-    memo:{
-        type: String,
-        required: false,
-        default: '-'
-    },
-    iconURL:{
-        type:String,
-        required: false,
-        //default:
-    },
-    isFinished:{
-        type: Boolean,
-        required: true
-    },
-    dueDate:{
-        type: Date,
-        default: Date.now
-    }
+  title: {
+    type: String,
+    required: false,
+    default: 'untitled',
+  },
+  coordinates: {
+    type: [Number, Number],
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  tags: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  memo: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  iconURL: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  isFinished: {
+    type: Boolean,
+    required: true,
+  },
+  createdDate: {
+    type: Date,
+    required: false,
+    default: Date.now,
+  },
+  dueDate: {
+    type: Date,
+    required: false,
+    default: '',
+  },
 });
 
 const Task = model<TaskDocument>('Task', TaskSchema);

@@ -31,13 +31,13 @@ paths:
           required: true
           schema:
             type: string
-        - name : title
+        - name: title
           in: body
           description: Task 제목
           required: false
           schema:
             type: string
-        - name : coordinates
+        - name: coordinates
           in: body
           description: Task [위도, 경도]
           required: true
@@ -69,7 +69,7 @@ paths:
           required: true
           schema:
             type: boolean
-        - name : dueDate
+        - name: dueDate
           in: body
           description: Task 달성 기한
           required: false
@@ -98,7 +98,7 @@ paths:
           required: true
           schema:
             type: string
-        - name : id
+        - name: id
           in: params
           description: Task ID
           required: true
@@ -115,7 +115,7 @@ paths:
           description: Bad Request
         500:
           description: Server Internal Error
-    delete:
+    patch:
       tags:
         - Task
       parameters:
@@ -131,13 +131,13 @@ paths:
           required: true
           schema:
             type: string
-        - name : title
+        - name: title
           in: body
           description: Task 제목
           required: false
           schema:
             type: string
-        - name : coordinates
+        - name: coordinates
           in: body
           description: Task [위도, 경도]
           required: true
@@ -169,7 +169,7 @@ paths:
           required: true
           schema:
             type: boolean
-        - name : dueDate
+        - name: dueDate
           in: body
           description: Task 달성 기한
           required: false
@@ -186,7 +186,7 @@ paths:
           description: Not found task
         500:
           description: Server Internal Error
-    patch:
+    delete:
       tags:
         - Task
       parameters:
@@ -198,7 +198,7 @@ paths:
             type: string
         - name: id
           in: params
-          description:  Task ObjectID
+          description: Task ObjectID
           required: true
           schema:
             type: string
