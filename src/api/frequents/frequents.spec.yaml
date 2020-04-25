@@ -45,7 +45,11 @@ paths:
           description: 자주가는 곳 [위도, 경도]
           required: true
           schema:
-            type: string
+            type: array
+            items:
+              type: number
+            minItems: 2
+            maxItems: 2
       summary: Frequent add API
       description: token값과 일치하는 유저에게 자주가는 곳 등록 / 최대 갯수 5개
       produces:
