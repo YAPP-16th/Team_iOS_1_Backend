@@ -1,0 +1,215 @@
+paths:
+  /api/tasks:
+    get:
+      tags:
+        - Task
+      parameters:
+        - name: token
+          in: header
+          description: 유저 토큰
+          required: true
+          schema:
+            type: string
+      summary: Task 목록 조회
+      description: Task 목록 조회
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successed get task list
+        404:
+          description: Not found task
+        500:
+          description: Server Internal Error
+    post:
+      tags:
+        - Task
+      parameters:
+        - name: token
+          in: header
+          description: 유저 토큰
+          required: true
+          schema:
+            type: string
+        - name : title
+          in: body
+          description: Task 제목
+          required: false
+          schema:
+            type: string
+        - name : coordinates
+          in: body
+          description: Task [위도, 경도]
+          required: true
+          schema:
+            type: array
+            items:
+              type: Number
+        - name: tags
+          in: body
+          description: Task 태그
+          required: false
+          schema:
+            type: string
+        - name: memo
+          in: body
+          description: Task 내용
+          required: false
+          schema:
+            type: string
+        - name: iconURL
+          in: body
+          description: Task Icon 경로
+          required: false
+          schema:
+            type: string
+        - name: isFinished
+          in: body
+          description: Task 수행 여부
+          required: true
+          schema:
+            type: boolean
+        - name : dueDate
+          in: body
+          description: Task 달성 기한
+          required: false
+          schema:
+            type: string
+      summary: Task 작성
+      description: Task 작성
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful Operation
+        400:
+          description: Bad Request
+        500:
+          description: Server Error
+
+  /api/tasks/{id}:
+    get:
+      tags:
+        - Task
+      parameters:
+        - name: token
+          in: header
+          description: 유저 토큰
+          required: true
+          schema:
+            type: string
+        - name : id
+          in: params
+          description: Task ID
+          required: true
+          schema:
+            type: string
+      summary: 특정 Task 조회
+      description: 특정 Task 조회
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successed get Task
+        400:
+          description: Bad Request
+        500:
+          description: Server Internal Error
+    delete:
+      tags:
+        - Task
+      parameters:
+        - name: token
+          in: header
+          description: 유저 토큰
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: params
+          description: Task ObjectID
+          required: true
+          schema:
+            type: string
+        - name : title
+          in: body
+          description: Task 제목
+          required: false
+          schema:
+            type: string
+        - name : coordinates
+          in: body
+          description: Task [위도, 경도]
+          required: true
+          schema:
+            type: array
+            items:
+              type: Number
+        - name: tags
+          in: body
+          description: Task 태그
+          required: false
+          schema:
+            type: string
+        - name: memo
+          in: body
+          description: Task 내용
+          required: false
+          schema:
+            type: string
+        - name: iconURL
+          in: body
+          description: Task Icon 경로
+          required: false
+          schema:
+            type: string
+        - name: isFinished
+          in: body
+          description: Task 수행 여부
+          required: true
+          schema:
+            type: boolean
+        - name : dueDate
+          in: body
+          description: Task 달성 기한
+          required: false
+          schema:
+            type: string
+      summary: 특정 Task 수정
+      description: 특정 Task 수정
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Success
+        404:
+          description: Not found task
+        500:
+          description: Server Internal Error
+    patch:
+      tags:
+        - Task
+      parameters:
+        - name: token
+          in: header
+          description: 유저 토큰
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: params
+          description:  Task ObjectID
+          required: true
+          schema:
+            type: string
+      summary: 특정 Task 삭제
+      description: 특정 Task 삭제
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Successed remove Task
+        404:
+          description: Not found task
+        500:
+          description: Server Internal Error
