@@ -9,7 +9,7 @@ tasks.post('/',checkAuth, tasksCtrl.write);
 const task = new Router();
 
 task.get('/', tasksCtrl.taskInfo);
-task.delete('/', tasksCtrl.secession);
+task.delete('/', tasksCtrl.remove);
 task.patch('/', tasksCtrl.updateTask);
 
 tasks.use('/:id', checkAuth, tasksCtrl.isExisted ,task.routes());

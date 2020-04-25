@@ -2,8 +2,8 @@ import { Context } from 'koa';
 import User from '../models/user';
 
 export const checkAuth = async (ctx: Context, next: () => void) => {
-  //const token = ctx.request.header['authorization'].split(' ')[1];
-  const token = ctx.request.header['authorization'];
+  const token = ctx.request.header['authorization'].split(' ')[1];
+  
   try {
     const user = await User.findByToken(token);
 

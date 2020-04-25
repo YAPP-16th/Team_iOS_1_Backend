@@ -5,14 +5,11 @@ import User from '../../models/task';
 
 export const isExisted = async (ctx: Context, next: () => void) => {
 
-  const user = ctx.state.user;
   const { id } = ctx.params;
 
-  const taskIdx = user.taskIds.findIndex(
-    (task: TaskDocument) => task._id == id,
-  );
+  const task = await Task.findById(id).exec();
 
-  if (taskIdx === -1) {
+  if(!task){
     ctx.status = 404;
     ctx.body = {
       description: 'Not found task',
@@ -21,7 +18,7 @@ export const isExisted = async (ctx: Context, next: () => void) => {
   }
 
   ctx.state.id = id;
-  ctx.state.taskIdx = taskIdx;
+  ctx.state.task = task;
 
   return next();
 };
@@ -33,40 +30,29 @@ export const list = async (ctx: Context) => {
   const user = ctx.state.user;
   const taskIds = user.taskIds;
   
-  const result = [];
   try{
-    for(let i = 0 ; i < taskIds.length ; i++){
-      result.push(await Task.findById(taskIds[i]));
+    const tasks = await Task.find({ _id : {$in : taskIds} }).exec();
+    ctx.status = 200;
+    ctx.body = {
+      description: 'Successed get task list',
+      tasks: tasks 
     }
   } catch (e) {
     ctx.throw(500, e);
   }
-
-  ctx.body = {
-    description: 'Succeed get task list',
-    tasks: result
-  };
-
 }
 /* 특정 Task 정보 읽기
 GET /api/tasks/:id
 */
 export const taskInfo = async (ctx : Context) => {
 
-  const {user, taskIdx} = ctx.state;
+  const { task } = ctx.state;
 
-  try{
-    const result = await Task.findById({_id : user.taskIds[taskIdx]});
-
-    ctx.status = 200;
-    ctx.body = {
-      description: 'Succeed get task info',
-      task: result
-    }
-  } catch (e) {
-    ctx.throw(500, e);
+  ctx.status =200;
+  ctx.body = {
+    description :'Successed get Task',
+    task : task
   }
-
 }
 
 /* 특정 Task 작성
@@ -96,7 +82,7 @@ export const write = async (ctx : Context) => {
 
   ctx.status = 200;
   ctx.body = {
-    description : 'Succeed write Task',
+    description : 'Successed write Task',
     user : user
   }
 
@@ -106,19 +92,28 @@ export const write = async (ctx : Context) => {
 /* 특정 Task 삭제
 DELETE /api/tasks/:id
 */
-export const secession = async (ctx : Context) => {
-  //클라이언트에서 id를 어떻게 알아..?
+export const remove = async (ctx : Context) => {
   const {user, id} = ctx.state;
 
   user.taskIds.pull({_id : id})
 
   try{
     await user.save();
-    ctx.status = 204;
-
   } catch (e) {
     ctx.throw(500, e);
   }
+
+  try{
+    await Task.findByIdAndRemove({_id:id});
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  ctx.status = 204;
+  ctx.body = {
+    description:"Successed remove Task"
+  }
+
 };
 
 /* 특정 Task 업데이트
