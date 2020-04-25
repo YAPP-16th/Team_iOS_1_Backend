@@ -7,18 +7,23 @@ export const isExisted = async (ctx: Context, next: () => void) => {
 
   const { id } = ctx.params;
 
-  const task = await Task.findById(id).exec();
+  try{
+    const task = await Task.findById(id).exec();
 
-  if(!task){
-    ctx.status = 404;
-    ctx.body = {
-      description: 'Not found task',
-    };
-    return;
+    if(!task){
+      ctx.status = 404;
+      ctx.body = {
+        description: 'Not found task',
+      };
+      return;
+    }
+
+    ctx.state.id = id;
+    ctx.state.task = task;
+
+  } catch (e) {
+    ctx.throw(500, e);
   }
-
-  ctx.state.id = id;
-  ctx.state.task = task;
 
   return next();
 };
