@@ -1,0 +1,45 @@
+{
+  "name": "Team_iOS_1_Backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/YAPP-16th/Team_iOS_1_Backend.git",
+  "description": "YAPP 16기 iOS 1팀",
+  "author": "SimJunSik <wnstlr24@naver.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec ts-node src/index.ts",
+    "dev": "cross-env NODE_ENV=develop nodemon src/index.ts",
+    "prod": "cross-env NODE_ENV=prod node dist/index.js",
+    "build": "tsc -p .",
+    "test": "exit"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.0",
+    "dotenv": "^8.2.0",
+    "google-auth-library": "^6.0.0",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^8.0.8",
+    "koa2-swagger-ui": "^2.16.0",
+    "mongoose": "^5.9.1",
+    "swagger-jsdoc": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.11.1",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-json": "^2.0.18",
+    "@types/koa-logger": "^3.1.1",
+    "@types/koa-router": "^7.4.0",
+    "@types/mongoose": "^5.7.1",
+    "@types/node": "^13.7.1",
+    "@types/swagger-jsdoc": "^3.0.2",
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
+    "eslint": "^6.8.0",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  }
+}

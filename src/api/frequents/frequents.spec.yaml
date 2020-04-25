@@ -1,0 +1,164 @@
+paths:
+  /api/frequents:
+    get:
+      tags:
+        - Frequents
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+      summary: Frequents list API
+      description: token에 일치하는 유저의 자주가는 곳 리스트 반환
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successed get frequents list
+        401:
+          description: Invalid token
+        404:
+          description: Not found frequent
+        500:
+          description: Server Internal Error
+
+    post:
+      tags:
+        - Frequents
+      parameters:
+        - name: name
+          in: body
+          description: 자주가는 곳 이름
+          required: true
+          schema:
+            type: string
+        - name: address
+          in: body
+          description: 자주가는 곳 주소
+          required: true
+          schema:
+            type: string
+        - name: coordinates
+          in: body
+          description: 자주가는 곳 [위도, 경도]
+          required: true
+          schema:
+            type: array
+            items:
+              type: number
+            minItems: 2
+            maxItems: 2
+      summary: Frequent add API
+      description: token값과 일치하는 유저에게 자주가는 곳 등록 / 최대 갯수 5개
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Successed write frequent
+        400:
+          description: Frequents Exceeds the limit of 5
+        401:
+          description: Invalid token
+        404:
+          description: Not found user
+        500:
+          description: Server Internal Error
+
+  /api/frequents/{frequentId}:
+    get:
+      tags:
+        - Frequents
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+        - name: frequent id
+          in: path
+          description: 자주가는 곳 id
+          required: true
+          schema:
+            type: string
+      summary: Frequent Info API
+      description: token에 일치하는 유저의 자주가는 곳 중에서 id에 해당되는 곳 반환
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successed get frequent info
+        401:
+          description: Invalid token
+        404:
+          description: Not found frequent
+        500:
+          description: Server Internal Error
+
+    patch:
+      tags:
+        - Frequents
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+        - name: frequent id
+          in: path
+          description: 자주가는 곳 id
+          required: true
+          schema:
+            type: string
+        - name: 수정할 필드들
+          in: body
+          description: update 하기 원하는 field , value 들을 body에 담아서 보낼 것
+          required: true
+          schema:
+            type: string
+      summary: Frequent update API
+      description: token에 일치하는 유저의 자주가는 곳 중에서 id에 해당되는 곳 수정
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Successed modify frequent info
+        401:
+          description: Invalid token
+        404:
+          description: Not found frequent
+        500:
+          description: Server Internal Error
+
+    delete:
+      tags:
+        - Frequents
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+        - name: frequent id
+          in: path
+          description: 자주가는 곳 id
+          required: true
+          schema:
+            type: string
+      summary: Frequent delete API
+      description: token에 일치하는 유저의 자주가는 곳 중에서 id에 해당되는 곳 삭제
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Successed delete frequent
+        401:
+          description: Invalid token
+        404:
+          description: Not found frequent
+        500:
+          description: Server Internal Error

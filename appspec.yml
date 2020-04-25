@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/deploy/team-ios-1-server # S3에서 가지고온 파일을 저장할 디렉터리 지정
+    overwrite: yes
+
+permissions:
+  - object: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+    type:
+      - directory
+      - file
+hooks:
+  AfterInstall: # 배포가 끝나면 아래 명령어를 실행
+    - location: execute-deploy.sh
+      timeout: 180
