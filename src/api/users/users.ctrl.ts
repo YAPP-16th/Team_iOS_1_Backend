@@ -7,7 +7,7 @@ import { naverVerify }  from '../../lib/naverAuth';
 import { GoogleAuth } from 'google-auth-library';
 
 /* googleAuth 기반 회원가입
-POST /api/users
+POST /api/users/google
 { id, email, idtoken }
 */
 export const googleLogin = async (ctx: Context) => {
@@ -74,8 +74,12 @@ export const googleLogin = async (ctx: Context) => {
   }
 };
 
+/* naverAuth 기반 회원가입
+POST /api/users/naver
+{ id, email, access_token }
+*/
 export const naverLogin = async (ctx: Context) =>{
-  const { id, email, idtoken } = ctx.request.body;
+  const { id, email, idtoken :  } = ctx.request.body;
 
   try {
     const checkUser = await User.findOne({ userId: email }).exec();
