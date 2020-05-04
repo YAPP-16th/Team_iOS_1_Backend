@@ -79,7 +79,7 @@ POST /api/users/naver
 { id, email, access_token }
 */
 export const naverLogin = async (ctx: Context) =>{
-  const { id, email, idtoken :  } = ctx.request.body;
+  const { id, email, access_token  } = ctx.request.body;
 
   try {
     const checkUser = await User.findOne({ userId: email }).exec();
@@ -96,7 +96,7 @@ export const naverLogin = async (ctx: Context) =>{
     ctx.throw(500, e);
   }
 
-  const payload : any = await naverVerify(idtoken);
+  const payload : any = await naverVerify(access_token);
 
   if (!payload) {
     ctx.status = 401;
