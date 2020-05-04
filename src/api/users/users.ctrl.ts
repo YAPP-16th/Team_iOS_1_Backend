@@ -2,7 +2,9 @@ import { Context } from 'koa';
 import { UserDocument } from '../../models/user';
 import User from '../../models/user';
 import { createToken } from '../../lib/token';
-import { verify } from '../../lib/googleAuth';
+import { googleVerify } from '../../lib/googleAuth';
+import { naverVerify }  from '../../lib/naverAuth';
+import { GoogleAuth } from 'google-auth-library';
 
 /* googleAuth 기반 회원가입
 POST /api/users
@@ -26,7 +28,7 @@ export const googleLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await verify(idtoken);
+  const payload = await googleVerify(idtoken);
 
   if (!payload) {
     ctx.status = 401;
@@ -71,6 +73,71 @@ export const googleLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
+export const naverLogin = async (ctx: Context) =>{
+  const { id, email, idtoken } = ctx.request.body;
+
+  try {
+    const checkUser = await User.findOne({ userId: email }).exec();
+
+    if (checkUser) {
+      ctx.status = 409;
+      ctx.body = {
+        description: 'Already Signed up user',
+        user: checkUser,
+      };
+      return;
+    }
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  const payload : any = await naverVerify(idtoken);
+
+  if (!payload) {
+    ctx.status = 401;
+    ctx.body = {
+      description: 'Invalid idtoken',
+    };
+    return;
+  }
+
+  const {
+    id: naverId,
+    email: userId,
+    name: nickname,
+    profile_image: profileImageUrl,
+  } = payload.response;
+
+  if (id !== naverId || email !== userId) {
+    ctx.status = 401;
+    ctx.body = {
+      description: 'Mismatch between idtoken information and id, email',
+    };
+    return;
+  }
+
+  const token = await createToken(userId!);
+
+  const user: UserDocument = new User({
+    userId,
+    nickname,
+    profileImageUrl,
+    token,
+  });
+
+  try {
+    await user.save();
+    ctx.status = 201;
+    ctx.body = {
+      description: 'Successed naverAuth',
+      user: user,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+}
 
 /* 특정 유저 정보 조회
 GET /api/users/:userId
