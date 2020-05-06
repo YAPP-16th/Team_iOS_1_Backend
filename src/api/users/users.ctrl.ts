@@ -8,10 +8,10 @@ import { GoogleAuth } from 'google-auth-library';
 
 /* googleAuth 기반 회원가입
 POST /api/users/google
-{ id, email, idtoken }
+{ id, email, access_token }
 */
 export const googleLogin = async (ctx: Context) => {
-  const { id, email, idtoken } = ctx.request.body;
+  const { id, email, access_token} = ctx.request.body;
 
   try {
     const checkUser = await User.findOne({ userId: email }).exec();
@@ -28,12 +28,12 @@ export const googleLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await googleVerify(idtoken);
+  const payload = await googleVerify(access_token);
 
   if (!payload) {
     ctx.status = 401;
     ctx.body = {
-      description: 'Invalid idtoken',
+      description: 'Invalid access_token',
     };
     return;
   }
@@ -48,7 +48,7 @@ export const googleLogin = async (ctx: Context) => {
   if (id !== googleId || email !== userId) {
     ctx.status = 401;
     ctx.body = {
-      description: 'Mismatch between idtoken information and id, email',
+      description: 'Mismatch between access_token information and id, email',
     };
     return;
   }
@@ -78,7 +78,7 @@ export const googleLogin = async (ctx: Context) => {
 POST /api/users/naver
 { id, email, access_token }
 */
-export const naverLogin = async (ctx: Context) =>{
+export const naverLogin = async (ctx: Context) => {
   const { id, email, access_token  } = ctx.request.body;
 
   try {
@@ -96,12 +96,12 @@ export const naverLogin = async (ctx: Context) =>{
     ctx.throw(500, e);
   }
 
-  const payload : any = await naverVerify(access_token);
+  const payload: any = await naverVerify(access_token);
 
   if (!payload) {
     ctx.status = 401;
     ctx.body = {
-      description: 'Invalid idtoken',
+      description: 'Invalid access_token',
     };
     return;
   }
@@ -116,7 +116,7 @@ export const naverLogin = async (ctx: Context) =>{
   if (id !== naverId || email !== userId) {
     ctx.status = 401;
     ctx.body = {
-      description: 'Mismatch between idtoken information and id, email',
+      description: 'Mismatch between access_token information and id, email',
     };
     return;
   }
@@ -140,7 +140,6 @@ export const naverLogin = async (ctx: Context) =>{
   } catch (e) {
     ctx.throw(500, e);
   }
-
 }
 
 /* 특정 유저 정보 조회
