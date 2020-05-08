@@ -1,7 +1,7 @@
-const request = require('request');
+import request from 'request';
 
 export const naverVerify = async (token: string) => {
-  return new Promise((resolve, reject) => {
+  const req: any = await new Promise((resolve, reject) => {
     const options = {
       url: 'https://openapi.naver.com/v1/nid/me',
       headers: { Authorization: 'Bearer ' + token },
@@ -19,4 +19,6 @@ export const naverVerify = async (token: string) => {
       }
     });
   });
+
+  return req.response;
 };

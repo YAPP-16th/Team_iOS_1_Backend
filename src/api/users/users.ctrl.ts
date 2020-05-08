@@ -4,7 +4,6 @@ import User from '../../models/user';
 import { createToken } from '../../lib/token';
 import { googleVerify } from '../../lib/googleAuth';
 import { naverVerify }  from '../../lib/naverAuth';
-import { GoogleAuth } from 'google-auth-library';
 
 /* googleAuth 기반 회원가입
 POST /api/users/google
@@ -96,7 +95,7 @@ export const naverLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload: any = await naverVerify(access_token);
+  const payload = await naverVerify(access_token);
 
   if (!payload) {
     ctx.status = 401;
@@ -111,7 +110,7 @@ export const naverLogin = async (ctx: Context) => {
     email: userId,
     name: nickname,
     profile_image: profileImageUrl,
-  } = payload.response;
+  } = payload;
 
   if (id !== naverId || email !== userId) {
     ctx.status = 401;
