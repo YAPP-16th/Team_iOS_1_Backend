@@ -4,7 +4,8 @@ import { checkAuth } from '../../lib/checkAuth';
 
 const users = new Router();
 users.get('/', usersCtrl.list);
-users.post('/', usersCtrl.googleLogin);
+users.post('/google', usersCtrl.googleLogin);
+users.post('/naver', usersCtrl.naverLogin);
 
 const user = new Router();
 user.get('/', usersCtrl.userInfo);

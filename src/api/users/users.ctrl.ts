@@ -2,14 +2,15 @@ import { Context } from 'koa';
 import { UserDocument } from '../../models/user';
 import User from '../../models/user';
 import { createToken } from '../../lib/token';
-import { verify } from '../../lib/googleAuth';
+import { googleVerify } from '../../lib/googleAuth';
+import { naverVerify }  from '../../lib/naverAuth';
 
 /* googleAuth 기반 회원가입
-POST /api/users
-{ id, email, idtoken }
+POST /api/users/google
+{ id, email, access_token }
 */
 export const googleLogin = async (ctx: Context) => {
-  const { id, email, idtoken } = ctx.request.body;
+  const { id, email, access_token} = ctx.request.body;
 
   try {
     const checkUser = await User.findOne({ userId: email }).exec();
@@ -26,12 +27,12 @@ export const googleLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await verify(idtoken);
+  const payload = await googleVerify(access_token);
 
   if (!payload) {
     ctx.status = 401;
     ctx.body = {
-      description: 'Invalid idtoken',
+      description: 'Invalid access_token',
     };
     return;
   }
@@ -46,7 +47,7 @@ export const googleLogin = async (ctx: Context) => {
   if (id !== googleId || email !== userId) {
     ctx.status = 401;
     ctx.body = {
-      description: 'Mismatch between idtoken information and id, email',
+      description: 'Mismatch between access_token information and id, email',
     };
     return;
   }
@@ -71,6 +72,74 @@ export const googleLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
+/* naverAuth 기반 회원가입
+POST /api/users/naver
+{ id, email, access_token }
+*/
+export const naverLogin = async (ctx: Context) => {
+  const { id, email, access_token  } = ctx.request.body;
+
+  try {
+    const checkUser = await User.findOne({ userId: email }).exec();
+
+    if (checkUser) {
+      ctx.status = 409;
+      ctx.body = {
+        description: 'Already Signed up user',
+        user: checkUser,
+      };
+      return;
+    }
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  const payload = await naverVerify(access_token);
+
+  if (!payload) {
+    ctx.status = 401;
+    ctx.body = {
+      description: 'Invalid access_token',
+    };
+    return;
+  }
+
+  const {
+    id: naverId,
+    email: userId,
+    name: nickname,
+    profile_image: profileImageUrl,
+  } = payload;
+
+  if (id !== naverId || email !== userId) {
+    ctx.status = 401;
+    ctx.body = {
+      description: 'Mismatch between access_token information and id, email',
+    };
+    return;
+  }
+
+  const token = await createToken(userId!);
+
+  const user: UserDocument = new User({
+    userId,
+    nickname,
+    profileImageUrl,
+    token,
+  });
+
+  try {
+    await user.save();
+    ctx.status = 201;
+    ctx.body = {
+      description: 'Successed naverAuth',
+      user: user,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+}
 
 /* 특정 유저 정보 조회
 GET /api/users/:userId
