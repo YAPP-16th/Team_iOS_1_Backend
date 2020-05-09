@@ -51,7 +51,8 @@ const TaskSchema: Schema = new Schema({
   },
   isFinished: {
     type: Boolean,
-    required: true,
+    required: false,
+    default: false,
   },
   isCheckedArrive: {
     type: Boolean,

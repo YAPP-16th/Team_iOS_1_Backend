@@ -37,13 +37,10 @@ const UserSchema: Schema = new Schema({
     required: false,
     ref: 'Task',
   },
-  frequents: {
-    type: [
-      {
-        type: FrequentSchema,
-        required: false,
-      },
-    ],
+  frequentIds: {
+    type: [ObjectId],
+    required: false,
+    ref: 'Frequent',
     validate: [arrayLimit, '{PATH} exceeds the limit of 5'],
   },
   token: {

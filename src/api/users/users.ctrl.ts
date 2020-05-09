@@ -3,14 +3,29 @@ import { UserDocument } from '../../models/user';
 import User from '../../models/user';
 import { createToken } from '../../lib/token';
 import { googleVerify } from '../../lib/googleAuth';
-import { naverVerify }  from '../../lib/naverAuth';
+import { naverVerify } from '../../lib/naverAuth';
+import Joi from 'joi';
 
 /* googleAuth 기반 회원가입
 POST /api/users/google
 { id, email, access_token }
 */
 export const googleLogin = async (ctx: Context) => {
-  const { id, email, access_token} = ctx.request.body;
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    email: Joi.string().required(),
+    access_token: Joi.string().required(),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  const { id, email, access_token } = ctx.request.body;
 
   try {
     const checkUser = await User.findOne({ userId: email }).exec();
@@ -78,7 +93,21 @@ POST /api/users/naver
 { id, email, access_token }
 */
 export const naverLogin = async (ctx: Context) => {
-  const { id, email, access_token  } = ctx.request.body;
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    email: Joi.string().required(),
+    access_token: Joi.string().required(),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  const { id, email, access_token } = ctx.request.body;
 
   try {
     const checkUser = await User.findOne({ userId: email }).exec();
@@ -139,7 +168,7 @@ export const naverLogin = async (ctx: Context) => {
   } catch (e) {
     ctx.throw(500, e);
   }
-}
+};
 
 /* 특정 유저 정보 조회
 GET /api/users/:userId
@@ -177,6 +206,20 @@ PATCH /api/users/:userId
 { 수정할필드1, 수정할필드2, ... }
 */
 export const updateUser = async (ctx: Context) => {
+  const schema = Joi.object().keys({
+    userId: Joi.string().allow(''),
+    nickname: Joi.string().allow(''),
+    profileImageUrl: Joi.string().allow(''),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
   const { userId } = ctx.params;
 
   const newData = { ...ctx.request.body };
