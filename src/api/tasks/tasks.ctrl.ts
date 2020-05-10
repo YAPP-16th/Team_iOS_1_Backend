@@ -1,6 +1,7 @@
 import { TaskDocument } from './../../models/task';
 import { Context } from 'koa';
 import Task from '../../models/task';
+import Joi from 'joi';
 
 export const isExisted = async (ctx: Context, next: () => void) => {
   const { id } = ctx.params;
@@ -43,6 +44,7 @@ export const list = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
 /* 특정 Task 정보 읽기
 GET /api/tasks/:id
 */
@@ -58,9 +60,34 @@ export const taskInfo = async (ctx: Context) => {
 
 /* 특정 Task 작성
 POST /api/tasks
-{ title, coordinates, tags, memo, iconURL, isFinished, dueDate}
+{ title, coordinates, address, tag, memo, iconURL, isFinished, isCheckedArrive, isCheckedLeave, createdDate, dueDate }
 */
 export const write = async (ctx: Context) => {
+  const schema = Joi.object().keys({
+    title: Joi.string().required(),
+    coordinates: Joi.array().items(Joi.number()).required(),
+    address: Joi.string().required(),
+    tag: Joi.object().keys({
+      name: Joi.string(),
+      color: Joi.string(),
+    }),
+    memo: Joi.string().allow(''),
+    iconURL: Joi.string().allow(''),
+    isFinished: Joi.boolean(),
+    isCheckedArrive: Joi.boolean().required(),
+    isCheckedLeave: Joi.boolean().required(),
+    createdDate: Joi.date(),
+    dueDate: Joi.date(),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
   const user = ctx.state.user;
   const task = new Task({ ...ctx.request.body });
 
@@ -119,6 +146,31 @@ PATCH /api/tasks/:id
 { 수정할필드1, 수정할필드2, ... }
 */
 export const updateTask = async (ctx: Context) => {
+  const schema = Joi.object().keys({
+    title: Joi.string().allow(''),
+    coordinates: Joi.array().items(Joi.number()),
+    address: Joi.string().allow(''),
+    tag: Joi.object().keys({
+      name: Joi.string().allow(''),
+      color: Joi.string().allow(''),
+    }),
+    memo: Joi.string().allow(''),
+    iconURL: Joi.string().allow(''),
+    isFinished: Joi.boolean(),
+    isCheckedArrive: Joi.boolean(),
+    isCheckedLeave: Joi.boolean(),
+    createdDate: Joi.date(),
+    dueDate: Joi.date(),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
   const { id } = ctx.state;
 
   try {
