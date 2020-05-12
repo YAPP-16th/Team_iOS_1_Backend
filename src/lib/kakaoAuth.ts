@@ -25,6 +25,6 @@ export const kakaoVerify = async (token: string) => {
       }
     });
   });
-
+  
   return result;
 };
