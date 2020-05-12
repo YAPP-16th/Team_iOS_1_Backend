@@ -29,8 +29,8 @@ const UserSchema: Schema = new Schema({
   },
   profileImageUrl: {
     type: String,
-    required: true,
-    //deafult : 디폴트 이미지
+    required: false,
+    default : 'default'
   },
   taskIds: {
     type: [ObjectId],

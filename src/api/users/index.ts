@@ -6,6 +6,7 @@ const users = new Router();
 users.get('/', usersCtrl.list);
 users.post('/google', usersCtrl.googleLogin);
 users.post('/naver', usersCtrl.naverLogin);
+users.post('/kakao', usersCtrl.kakaoLogin);
 
 const user = new Router();
 user.get('/', usersCtrl.userInfo);
