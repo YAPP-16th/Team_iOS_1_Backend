@@ -6,7 +6,7 @@ before_install:
   - npm install -g typescript
 branches:
   only:
-    - develop-1.5
+    - develop-2.0
 before_deploy: # 배포하기전 하는 작업들
   - rm -rf node_modules
   - zip -r Team_iOS_1_Backend *
@@ -24,7 +24,7 @@ deploy: # 배포
     wait-until-deployed: true
     on:
       repo: YAPP-16th/Team_iOS_1_Backend
-      branch: develop-1.5
+      branch: develop-2.0
 
   - provider: codedeploy # AWS CodeDeploy를 의미
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
@@ -38,7 +38,7 @@ deploy: # 배포
     wait-until-deployed: true
     on:
       repo: YAPP-16th/Team_iOS_1_Backend
-      branch: develop-1.5
+      branch: develop-2.0
 
 notifications:
   email:
