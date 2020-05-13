@@ -173,7 +173,7 @@ export const naverLogin = async (ctx: Context) => {
 
 /*kakaoAuth 기반 회원가입
 POST /api/users/kakao
-{ id, email, access_token}
+{ id, email, access_token }
 */
 export const kakaoLogin = async (ctx: Context) => {
   const schema = Joi.object().keys({
@@ -185,7 +185,6 @@ export const kakaoLogin = async (ctx: Context) => {
   const result = Joi.validate(ctx.request.body, schema);
 
   if (result.error) {
-    console.log(result.error);
     ctx.status = 400;
     ctx.body = result.error;
     return;
@@ -218,7 +217,7 @@ export const kakaoLogin = async (ctx: Context) => {
     return;
   }
 
-  const { kakaoId, userId, nickname, profileImageUrl} = payload;
+  const { kakaoId, userId, nickname, profileImageUrl } = payload;
 
   if (id !== kakaoId || email !== userId) {
     ctx.status = 401;
