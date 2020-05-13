@@ -171,7 +171,7 @@ export const naverLogin = async (ctx: Context) => {
   }
 };
 
-/*kakaoAuth 기반 회원가입
+/* kakaoAuth 기반 회원가입
 POST /api/users/kakao
 { id, email, access_token }
 */
@@ -191,7 +191,7 @@ export const kakaoLogin = async (ctx: Context) => {
   }
 
   const { id, email, access_token } = ctx.request.body;
-  
+
   try {
     const checkUser = await User.findOne({ userId: email }).exec();
 
@@ -246,7 +246,7 @@ export const kakaoLogin = async (ctx: Context) => {
   } catch (e) {
     ctx.throw(500, e);
   }
-}
+};
 
 /* 특정 유저 정보 조회
 GET /api/users/:userId
