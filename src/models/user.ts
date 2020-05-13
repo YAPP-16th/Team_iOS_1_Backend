@@ -29,21 +29,18 @@ const UserSchema: Schema = new Schema({
   },
   profileImageUrl: {
     type: String,
-    required: true,
-    //deafult : 디폴트 이미지
+    required: false,
+    default : 'default'
   },
   taskIds: {
     type: [ObjectId],
     required: false,
     ref: 'Task',
   },
-  frequents: {
-    type: [
-      {
-        type: FrequentSchema,
-        required: false,
-      },
-    ],
+  frequentIds: {
+    type: [ObjectId],
+    required: false,
+    ref: 'Frequent',
     validate: [arrayLimit, '{PATH} exceeds the limit of 5'],
   },
   token: {

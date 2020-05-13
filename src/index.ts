@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 
 import Koa, { Context } from 'koa';
 import Router from 'koa-router';
-import logger from 'koa-logger';
 import json from 'koa-json';
 import bodyParser from 'koa-bodyparser';
 import koaSwagger from 'koa2-swagger-ui';
@@ -12,6 +11,9 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import mongoose from 'mongoose';
 
 import api from './api';
+import morgan from 'koa-morgan';
+
+import { stream } from './config/winston';
 
 if (process.env.NODE_ENV === 'prod') {
   dotenv.config({ path: path.join(__dirname, '../env/.env.prod') });
@@ -44,7 +46,7 @@ const swaggerDefinition = {
   info: {
     // API informations (required)
     title: '곳감 API Specification', // Title (required)
-    version: '1.0.0', // Version (required)
+    version: '1.5.0', // Version (required)
     description: '곳감 API', // Description (optional)
   },
   schemes: ['http'],
@@ -63,7 +65,7 @@ router.get('/swagger.json', async (ctx: Context) => {
 
 // Middleware
 app.use(json());
-app.use(logger());
+app.use(morgan('combined', { stream }));
 app.use(bodyParser());
 app.use(
   koaSwagger({

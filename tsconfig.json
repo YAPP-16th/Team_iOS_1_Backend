@@ -11,5 +11,6 @@
     "baseUrl": "./",
     "esModuleInterop": true,
     "experimentalDecorators": true
-  }
+  },
+  "typeRoots": ["./src/types", "./node_modules/@types"]
 }

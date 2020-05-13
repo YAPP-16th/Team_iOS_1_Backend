@@ -4,10 +4,15 @@ export type TaskDocument = Document & {
   title: String;
   coordinates: [Number, Number];
   address: String;
-  tags: String;
+  tag: {
+    name: String;
+    color: String;
+  };
   memo: String;
   iconURL: String;
   isFinished: Boolean;
+  isCheckedArrive: Boolean;
+  isCheckedLeave: Boolean;
   createdDate: Date;
   dueDate: Date;
 };
@@ -26,8 +31,11 @@ const TaskSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-  tags: {
-    type: String,
+  tag: {
+    type: {
+      name: String,
+      color: String,
+    },
     required: false,
     default: '',
   },
@@ -42,6 +50,15 @@ const TaskSchema: Schema = new Schema({
     default: '',
   },
   isFinished: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  isCheckedArrive: {
+    type: Boolean,
+    required: true,
+  },
+  isCheckedLeave: {
     type: Boolean,
     required: true,
   },
