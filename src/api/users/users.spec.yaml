@@ -1,5 +1,5 @@
 paths:
-  /api/users:
+  /api/users/google:
     post:
       tags:
         - User
@@ -16,7 +16,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: idtoken
+        - name: access_token
           in: body
           description: 유저 구글 id token
           required: true
@@ -35,7 +35,91 @@ paths:
         400:
           description: Bad Request
         401:
-          description: Invalid idtoken 혹은 Mismatch between idtoken information and id, email
+          description: Invalid access_token 혹은 Mismatch between access_token information and id, email
+        409:
+          description: Already Signed up user
+        500:
+          description: Server Internal Error
+
+  /api/users/naver:
+    post:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: body
+          description: 유저 네이버 고유 id
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: body
+          description: 유저 네이버 이메일 주소
+          required: true
+          schema:
+            type: string
+        - name: access_token
+          in: body
+          description: 유저 네이버 access token
+          required: true
+          schema:
+            type: string
+      summary: User naverAuth API
+      description: 유저가 naverAuth login을 요청했을 때 처리하는 API
+        최초로 요청을 한 user라면 서버 db에 저장.
+        만약, 이미 저장되어 있는 user라면 pass.
+        response는 user 정보 + 서버에서 할당한 token.
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Successed naverAuth
+        400:
+          description: Bad Request
+        401:
+          description: Invalid access_token 혹은 Mismatch between access_token information and id, email
+        409:
+          description: Already Signed up user
+        500:
+          description: Server Internal Error
+
+  /api/users/kakao:
+    post:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: body
+          description: 유저 카카오 고유 id
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: body
+          description: 유저 카카오 이메일 주소
+          required: true
+          schema:
+            type: string
+        - name: access_token
+          in: body
+          description: 유저 카카오 id token
+          required: true
+          schema:
+            type: string
+      summary: User kakaoAuth API
+      description: 유저가 kakaoAuth login을 요청했을 때 처리하는 API
+        최초로 요청을 한 user라면 서버 db에 저장.
+        만약, 이미 저장되어 있는 user라면 pass.
+        response는 user 정보 + 서버에서 할당한 token.
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Successed kakaoAuth
+        400:
+          description: Bad Request
+        401:
+          description: Invalid access_token 혹은 Mismatch between access_token information and id, email
         409:
           description: Already Signed up user
         500:
@@ -67,7 +151,7 @@ paths:
         200:
           description: Successed get user info
         401:
-          description: Invalid idtoken
+          description: Invalid token 혹은 Invalid access_token
         404:
           description: Not found user
         500:
@@ -103,7 +187,7 @@ paths:
         200:
           description: Successed modify user info
         401:
-          description: Invalid idtoken
+          description: Invalid token 혹은 Invalid access_token
         404:
           description: Not found user
         500:
@@ -133,7 +217,7 @@ paths:
         204:
           description: Successed secession user
         401:
-          description: Invalid idtoken 혹은 Mismatch between idtoken information and id, email
+          description: Invalid token 혹은 Invalid access_token 혹은 Mismatch between access_token information and id, email
         404:
           description: Not found user
         500:

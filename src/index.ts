@@ -46,7 +46,7 @@ const swaggerDefinition = {
   info: {
     // API informations (required)
     title: '곳감 API Specification', // Title (required)
-    version: '1.0.0', // Version (required)
+    version: '1.5.0', // Version (required)
     description: '곳감 API', // Description (optional)
   },
   schemes: ['http'],
