@@ -1,13 +1,12 @@
 import { Document, Schema, model } from 'mongoose';
 
+const ObjectId = Schema.Types.ObjectId;
+
 export type TaskDocument = Document & {
   title: String;
   coordinates: [Number, Number];
   address: String;
-  tag: {
-    name: String;
-    color: String;
-  };
+  tag: String;
   memo: String;
   iconURL: String;
   isFinished: Boolean;
@@ -32,12 +31,10 @@ const TaskSchema: Schema = new Schema({
     required: true,
   },
   tag: {
-    type: {
-      name: String,
-      color: String,
-    },
+    type: ObjectId,
+    ref: 'Tag',
     required: false,
-    default: '',
+    default: null,
   },
   memo: {
     type: String,
