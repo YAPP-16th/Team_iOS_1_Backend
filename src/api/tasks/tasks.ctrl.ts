@@ -2,6 +2,8 @@ import { TaskDocument } from './../../models/task';
 import { Context } from 'koa';
 import Task from '../../models/task';
 import Joi from 'joi';
+import mongoose from 'mongoose';
+import Tag from '../../models/tag';
 
 export const isExisted = async (ctx: Context, next: () => void) => {
   const { id } = ctx.params;
@@ -67,10 +69,7 @@ export const write = async (ctx: Context) => {
     title: Joi.string().required(),
     coordinates: Joi.array().items(Joi.number()).required(),
     address: Joi.string().required(),
-    tag: Joi.object().keys({
-      name: Joi.string(),
-      color: Joi.string(),
-    }),
+    tag: Joi.string().allow(''),
     memo: Joi.string().allow(''),
     iconURL: Joi.string().allow(''),
     isFinished: Joi.boolean(),
@@ -88,6 +87,16 @@ export const write = async (ctx: Context) => {
     return;
   }
 
+  let tagId;
+  if (ctx.request.body.tag) {
+    tagId = mongoose.Types.ObjectId(ctx.request.body.tag);
+
+    ctx.request.body = {
+      ...ctx.request.body,
+      tag: tagId,
+    };
+  }
+
   const user = ctx.state.user;
   const task = new Task({ ...ctx.request.body });
 
@@ -96,6 +105,25 @@ export const write = async (ctx: Context) => {
     await task.save();
   } catch (e) {
     ctx.throw(500, e);
+  }
+
+  if (tagId) {
+    try {
+      const tag = await Tag.findById({ _id: tagId }).exec();
+
+      if (!tag) {
+        ctx.status = 404;
+        ctx.body = {
+          description: 'Not found tag',
+        };
+        return;
+      }
+
+      tag.taskIds.push(task._id);
+      await tag.save();
+    } catch (e) {
+      ctx.throw(500, e);
+    }
   }
 
   //User Document에서 Task ObjectId 참조
@@ -150,10 +178,7 @@ export const updateTask = async (ctx: Context) => {
     title: Joi.string().allow(''),
     coordinates: Joi.array().items(Joi.number()),
     address: Joi.string().allow(''),
-    tag: Joi.object().keys({
-      name: Joi.string().allow(''),
-      color: Joi.string().allow(''),
-    }),
+    tag: Joi.string().allow(''),
     memo: Joi.string().allow(''),
     iconURL: Joi.string().allow(''),
     isFinished: Joi.boolean(),
@@ -171,12 +196,62 @@ export const updateTask = async (ctx: Context) => {
     return;
   }
 
-  const { id } = ctx.state;
+  const { id, task } = ctx.state;
+
+  let tagId;
+  if (ctx.request.body.tag) {
+    tagId = mongoose.Types.ObjectId(ctx.request.body.tag);
+
+    ctx.request.body = {
+      ...ctx.request.body,
+      tag: tagId,
+    };
+  }
+
+  const prevTagId = task.tag;
 
   try {
-    await Task.findByIdAndUpdate(id, ctx.request.body);
+    await Task.findByIdAndUpdate(id, ctx.request.body).exec();
   } catch (e) {
     ctx.throw(500, e);
+  }
+
+  if (tagId) {
+    try {
+      const tag = await Tag.findById({ _id: tagId }).exec();
+
+      if (!tag) {
+        ctx.status = 404;
+        ctx.body = {
+          description: 'Not found tag',
+        };
+        return;
+      }
+
+      tag.taskIds.push(id);
+      await tag.save();
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+  }
+
+  if (prevTagId) {
+    try {
+      const tag: any = await Tag.findById({ _id: prevTagId }).exec();
+
+      if (!tag) {
+        ctx.status = 404;
+        ctx.body = {
+          description: 'Not found tag',
+        };
+        return;
+      }
+
+      tag.taskIds.pull(id);
+      await tag.save();
+    } catch (e) {
+      ctx.throw(500, e);
+    }
   }
 
   ctx.status = 204;

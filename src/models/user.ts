@@ -1,5 +1,7 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import Frequent, { FrequentDocument, FrequentSchema } from './frequent';
+import { TaskDocument } from './task';
+import { TagDocument } from './tag';
 
 const ObjectId = Schema.Types.ObjectId;
 
@@ -12,7 +14,8 @@ export type UserDocument = Document & {
   nickname: String;
   profileImageUrl: String;
   taskIds: [String];
-  frequents: [FrequentDocument];
+  frequentIds: [String];
+  tagIds: [String];
   token: String;
   joinedDate: Date;
 };
@@ -30,18 +33,20 @@ const UserSchema: Schema = new Schema({
   profileImageUrl: {
     type: String,
     required: false,
-    default : 'default'
+    default: 'default',
   },
   taskIds: {
-    type: [ObjectId],
+    type: [{ type: ObjectId, ref: 'Task' }],
     required: false,
-    ref: 'Task',
   },
   frequentIds: {
-    type: [ObjectId],
+    type: [{ type: ObjectId, ref: 'Frequent' }],
     required: false,
-    ref: 'Frequent',
     validate: [arrayLimit, '{PATH} exceeds the limit of 5'],
+  },
+  tagIds: {
+    type: [{ type: ObjectId, ref: 'Tag' }],
+    required: false,
   },
   token: {
     type: String,
