@@ -69,6 +69,18 @@ paths:
           required: true
           schema:
             type: boolean
+        - name: isCheckedArrive
+          in: body
+          description: 도착할 때 알림 여부
+          required: true
+          schema:
+            type: boolean
+        - name: isCheckedLeave
+          in: body
+          description: 떠날 때 알림 여부
+          required: true
+          schema:
+            type: boolean
         - name: dueDate
           in: body
           description: Task 달성 기한
