@@ -58,7 +58,7 @@ paths:
         201:
           description: Successed write frequent
         400:
-          description: Frequents Exceeds the limit of 5
+          description: Invalid request body 혹은 Frequents Exceeds the limit of 5
         401:
           description: Invalid token
         404:
@@ -126,6 +126,8 @@ paths:
       responses:
         204:
           description: Successed modify frequent info
+        400:
+          description: Invalid request body
         401:
           description: Invalid token
         404:
