@@ -8,7 +8,7 @@ export type TagDocument = Document & {
   taskIds: [String];
   creator: {
     userId: String;
-    nickname: String;
+    nickame: String;
   };
 };
 
