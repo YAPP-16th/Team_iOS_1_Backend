@@ -45,9 +45,15 @@ paths:
             type: array
             items:
               type: Number
-        - name: tags
+        - name: address
           in: body
-          description: Task 태그
+          description: Task 주소
+          required: true
+          schema:
+            type: string
+        - name: tag
+          in: body
+          description: 태그 ObjectID
           required: false
           schema:
             type: string
@@ -95,7 +101,7 @@ paths:
         200:
           description: Successful Operation
         400:
-          description: Bad Request
+          description: Bad Request 혹은 Invalid request body
         500:
           description: Server Error
 
@@ -124,7 +130,7 @@ paths:
         200:
           description: Successed get Task
         400:
-          description: Bad Request
+          description: Bad Request 혹은 Invalid request body
         500:
           description: Server Internal Error
     patch:
@@ -157,9 +163,15 @@ paths:
             type: array
             items:
               type: Number
-        - name: tags
+        - name: address
           in: body
-          description: Task 태그
+          description: Task 주소
+          required: true
+          schema:
+            type: string
+        - name: tag
+          in: body
+          description: 태그 ObjectID
           required: false
           schema:
             type: string
