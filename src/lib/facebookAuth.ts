@@ -14,13 +14,13 @@ export const facebookVerify = async (token: string) => {
       const userInfo = JSON.parse(res);
 
       if (!err) {
-        const aaa = {
+        const info = {
           facebookId: userInfo.id,
           userId: userInfo.email,
           nickname: userInfo.name,
           profileImageUrl: userInfo.picture.data.url,
         };
-        resolve(aaa);
+        resolve(info);
       } else {
         reject(err);
       }

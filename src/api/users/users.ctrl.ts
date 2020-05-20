@@ -285,7 +285,7 @@ export const facebookLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await facebookVerify(access_token);
+  const payload: any = await facebookVerify(access_token);
 
   if (!payload) {
     ctx.status = 401;
