@@ -1,8 +1,13 @@
-import { TagDocument, TagSchema } from './tag';
 import { Schema, model, Document } from 'mongoose';
 
+const ObjectId = Schema.Types.ObjectId;
+
 export type ShareAlarmDocument = Document & {
-  tag: TagDocument;
+  tag: {
+    name: String;
+    color: String;
+  };
+  shareId: String;
   creator: {
     userId: String;
     nickame: String;
@@ -10,7 +15,21 @@ export type ShareAlarmDocument = Document & {
 };
 
 const ShareAlarmSchema: Schema = new Schema({
-  tag: TagSchema,
+  tag: {
+    name: {
+      type: String,
+      required: true,
+    },
+    color: {
+      type: String,
+      required: true,
+    },
+  },
+  shareId: {
+    type: ObjectId,
+    ref: 'Share',
+    required: true,
+  },
   creator: {
     userId: {
       type: String,

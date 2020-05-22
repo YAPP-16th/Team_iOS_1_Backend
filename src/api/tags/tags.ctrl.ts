@@ -114,16 +114,16 @@ DELETE /api/tags/:id
 export const remove = async (ctx: Context) => {
   const { user, id, tag } = ctx.state;
 
-  user.tagIds.pull({ _id: id });
-
   try {
-    await user.save();
+    await Tag.findByIdAndRemove({ _id: id });
   } catch (e) {
     ctx.throw(500, e);
   }
 
+  user.tagIds.pull({ _id: id });
+
   try {
-    await Tag.findByIdAndRemove({ _id: id });
+    await user.save();
   } catch (e) {
     ctx.throw(500, e);
   }

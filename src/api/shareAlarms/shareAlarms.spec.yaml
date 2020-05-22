@@ -1,0 +1,94 @@
+paths:
+  /api/shareAlarms:
+    get:
+      tags:
+        - shareAlarms
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+      summary: shareAlarms list API
+      description: token에 일치하는 유저의 shareAlarms 리스트 반환
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successed get shareAlarms list
+        401:
+          description: Invalid token
+        404:
+          description: Not found shareAlarm
+        500:
+          description: Server Internal Error
+
+    post:
+      tags:
+        - shareAlarms
+      parameters:
+        - name: shareId
+          in: body
+          description: 공유 ObjectID
+          required: true
+          schema:
+            type: string
+        - name: tag
+          in: body
+          description: 공유하는 tag의 이름(name), 색(color)을 객체로 넘길 것
+          required: true
+          schema:
+            type: object
+        - name: creator
+          in: body
+          description: 생성한 유저의 이메일(userId), 닉네임(nickname)을 객체로 넘길 것
+          required: true
+          schema:
+            type: object
+      summary: shareAlarm add API
+      description: token값과 일치하는 유저에게 공유 알림 생성
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Successed write shareAlarm
+        400:
+          description: Invalid request body
+        401:
+          description: Invalid token
+        404:
+          description: Not found user
+        500:
+          description: Server Internal Error
+
+  /api/shareAlarms/{shareAlarmId}:
+    delete:
+      tags:
+        - shareAlarms
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+        - name: shareAlarm id
+          in: path
+          description: 공유 알림 id
+          required: true
+          schema:
+            type: string
+      summary: shareAlarm delete API
+      description: token에 일치하는 유저의 공유 알림 중에서 id에 해당되는 것 삭제
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Successed delete shareAlarm
+        401:
+          description: Invalid token
+        404:
+          description: Not found shareAlarm
+        500:
+          description: Server Internal Error
