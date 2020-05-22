@@ -1,7 +1,7 @@
 import request from 'request';
 
 export const facebookVerify = async (token: string) => {
-  const result = new Promise((resolve, reject) => {
+  const result : any = new Promise((resolve, reject) => {
     const option = {
       uri: 'https://graph.facebook.com/v7.0/me',
       qs: {
