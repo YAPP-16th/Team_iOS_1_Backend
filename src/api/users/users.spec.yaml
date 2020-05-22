@@ -23,7 +23,8 @@ paths:
           schema:
             type: string
       summary: User googleAuth API
-      description: 유저가 googleAuth login을 요청했을 때 처리하는 API
+      description: |
+        유저가 googleAuth login을 요청했을 때 처리하는 API
         최초로 요청을 한 user라면 서버 db에 저장.
         만약, 이미 저장되어 있는 user라면 pass.
         response는 user 정보 + 서버에서 할당한 token.
@@ -65,7 +66,8 @@ paths:
           schema:
             type: string
       summary: User naverAuth API
-      description: 유저가 naverAuth login을 요청했을 때 처리하는 API
+      description: |
+        유저가 naverAuth login을 요청했을 때 처리하는 API
         최초로 요청을 한 user라면 서버 db에 저장.
         만약, 이미 저장되어 있는 user라면 pass.
         response는 user 정보 + 서버에서 할당한 token.
@@ -107,7 +109,8 @@ paths:
           schema:
             type: string
       summary: User kakaoAuth API
-      description: 유저가 kakaoAuth login을 요청했을 때 처리하는 API
+      description: |
+        유저가 kakaoAuth login을 요청했을 때 처리하는 API
         최초로 요청을 한 user라면 서버 db에 저장.
         만약, 이미 저장되어 있는 user라면 pass.
         response는 user 정보 + 서버에서 할당한 token.
@@ -149,7 +152,8 @@ paths:
           schema:
             type: string
       summary: User FacebookAuth API
-      description: 유저가 FacebookAuth login을 요청했을 때 처리하는 API
+      description: |
+        유저가 FacebookAuth login을 요청했을 때 처리하는 API
         최초로 요청을 한 user라면 서버 db에 저장.
         만약, 이미 저장되어 있는 user라면 pass.
         response는 user 정보 + 서버에서 할당한 token.
@@ -185,7 +189,8 @@ paths:
           schema:
             type: string
       summary: User info API
-      description: token값과 일치하는 유저 정보 반환하는 API /
+      description: |
+        token값과 일치하는 유저 정보 반환
         Header > Authorization에 Token tokenvalue 형태로 보낼 것
       produces:
         - application/json
@@ -222,7 +227,9 @@ paths:
           schema:
             type: string
       summary: User update API
-      description: token값과 일치하는 유저 정보를 수정
+      description: |
+        token값과 일치하는 유저 정보를 수정
+        Header > Authorization에 Token tokenvalue 형태로 보낼 것
       produces:
         - application/json
       responses:
@@ -252,7 +259,9 @@ paths:
           schema:
             type: string
       summary: User secession API
-      description: token값과 일치하는 유저 정보 회원탈퇴
+      description: |
+        token값과 일치하는 유저 정보 회원탈퇴
+        Header > Authorization에 Token tokenvalue 형태로 보낼 것
       produces:
         - application/json
       responses:
