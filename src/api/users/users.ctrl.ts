@@ -5,6 +5,7 @@ import { createToken } from '../../lib/token';
 import { googleVerify } from '../../lib/googleAuth';
 import { naverVerify } from '../../lib/naverAuth';
 import { kakaoVerify } from '../../lib/kakaoAuth';
+import { facebookVerify } from '../../lib/facebookAuth';
 import Joi from 'joi';
 
 /* googleAuth 기반 회원가입
@@ -241,6 +242,83 @@ export const kakaoLogin = async (ctx: Context) => {
     ctx.status = 201;
     ctx.body = {
       description: 'Successed kakaoAuth',
+      user: user,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+/* facebookAuth 기반 회원가입
+POST /api/users/facebook
+{ id, email, access_token }
+*/
+export const facebookLogin = async (ctx: Context) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    email: Joi.string().required(),
+    access_token: Joi.string().required(),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  const { id, email, access_token } = ctx.request.body;
+
+  try {
+    const checkUser = await User.findOne({ userId: email }).exec();
+
+    if (checkUser) {
+      ctx.status = 409;
+      ctx.body = {
+        description: 'Already Signed up user',
+        user: checkUser,
+      };
+      return;
+    }
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  const payload = await facebookVerify(access_token);
+
+  if (!payload) {
+    ctx.status = 401;
+    ctx.body = {
+      description: 'Invalid access_token',
+    };
+    return;
+  }
+
+  const { facebookId, userId, nickname, profileImageUrl } = payload;
+
+  if (id !== facebookId || email !== userId) {
+    ctx.status = 401;
+    ctx.body = {
+      description: 'Mismatch between access_token information and id, email',
+    };
+    return;
+  }
+
+  const token = await createToken(userId!);
+
+  const user: UserDocument = new User({
+    userId,
+    nickname,
+    profileImageUrl,
+    token,
+  });
+
+  try {
+    await user.save();
+    ctx.status = 201;
+    ctx.body = {
+      description: 'Successed facebookAuth',
       user: user,
     };
   } catch (e) {
