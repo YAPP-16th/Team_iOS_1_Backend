@@ -4,6 +4,7 @@ import { Schema, model, Document } from 'mongoose';
 export type ShareDocument = Document & {
   tasks: [TaskDocument];
   senderId: String;
+  createdAt: Date;
 };
 
 const ShareSchema: Schema = new Schema({
@@ -14,6 +15,12 @@ const ShareSchema: Schema = new Schema({
   senderId: {
     type: String,
     required: true,
+  },
+  createdAt: {
+    type: Date,
+    expires: 10,
+    required: false,
+    default: Date.now,
   },
 });
 
