@@ -78,7 +78,7 @@ export const write = async (ctx: Context) => {
       _id: user._id,
       userId: user.userId,
       nickname: user.nickname,
-      taskIds: user.taskIds,
+      frequentIds: user.frequentIds,
     },
     frequent: frequent,
   };
