@@ -139,7 +139,13 @@ export const write = async (ctx: Context) => {
   ctx.status = 200;
   ctx.body = {
     description: 'Successed write Task',
-    user: user,
+    user: {
+      _id: user._id,
+      userId: user.userId,
+      nickname: user.nickname,
+      taskIds: user.taskIds,
+    },
+    task: task,
   };
 };
 

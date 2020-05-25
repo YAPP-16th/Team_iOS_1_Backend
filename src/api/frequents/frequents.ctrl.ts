@@ -74,7 +74,13 @@ export const write = async (ctx: Context) => {
   ctx.status = 201;
   ctx.body = {
     description: 'Successed write frequent',
-    user: user,
+    user: {
+      _id: user._id,
+      userId: user.userId,
+      nickname: user.nickname,
+      frequentIds: user.frequentIds,
+    },
+    frequent: frequent,
   };
 };
 

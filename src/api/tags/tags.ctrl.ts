@@ -91,7 +91,13 @@ export const write = async (ctx: Context) => {
   ctx.status = 200;
   ctx.body = {
     description: 'Successed write Tag',
-    user: user,
+    user: {
+      _id: user._id,
+      userId: user.userId,
+      nickname: user.nickname,
+      tagIds: user.tagIds,
+    },
+    tag: tag,
   };
 };
 
