@@ -97,7 +97,13 @@ export const write = async (ctx: Context) => {
   ctx.status = 200;
   ctx.body = {
     description: 'Successed write ShareAlarm',
-    user: user,
+    user: {
+      _id: user._id,
+      userId: user.userId,
+      nickname: user.nickname,
+      shareAlarmIds: user.shareAlarmIds,
+    },
+    shareAlarm: shareAlarm,
   };
 };
 
