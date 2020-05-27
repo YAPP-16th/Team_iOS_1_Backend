@@ -16,6 +16,8 @@ export type UserDocument = Document & {
   taskIds: [String];
   frequentIds: [String];
   tagIds: [String];
+  shareIds: [String];
+  shareAlarmIds: [String];
   token: String;
   joinedDate: Date;
 };
@@ -46,6 +48,14 @@ const UserSchema: Schema = new Schema({
   },
   tagIds: {
     type: [{ type: ObjectId, ref: 'Tag' }],
+    required: false,
+  },
+  shareIds: {
+    type: [{ type: ObjectId, ref: 'Share' }],
+    required: false,
+  },
+  shareAlarmIds: {
+    type: [{ type: ObjectId, ref: 'ShareAlarm' }],
     required: false,
   },
   token: {

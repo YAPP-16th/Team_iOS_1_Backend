@@ -1,0 +1,108 @@
+paths:
+  /api/shares:
+    get:
+      tags:
+        - shares
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+      summary: shares list API
+      description: token에 일치하는 유저의 shares 리스트 반환
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successed get shares list
+        401:
+          description: Invalid token
+        404:
+          description: Not found share
+        500:
+          description: Server Internal Error
+
+    post:
+      tags:
+        - shares
+      parameters:
+        - name: tagId
+          in: body
+          description: 태그 ObjectID
+          required: true
+          schema:
+            type: string
+      summary: share add API
+      description: token값과 일치하는 유저가 tagId를 기반으로 하는 공유 생성
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Successed write share
+        400:
+          description: Invalid request body
+        401:
+          description: Invalid token
+        404:
+          description: Not found user
+        500:
+          description: Server Internal Error
+
+  /api/shares/{shareId}:
+    post:
+      tags:
+        - shares
+      parameters:
+        - name: shareId
+          in: body
+          description: 공유 ObjectID
+          required: true
+          schema:
+            type: string
+      summary: share receive API
+      description: token값과 일치하는 유저가 shareId에 해당하는 공유 내용 받기
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Successed receive share
+        400:
+          description: Invalid request body
+        401:
+          description: Invalid token
+        404:
+          description: Not found user
+        500:
+          description: Server Internal Error
+
+    delete:
+      tags:
+        - shares
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+        - name: share id
+          in: path
+          description: 공유 id
+          required: true
+          schema:
+            type: string
+      summary: share delete API
+      description: token에 일치하는 유저의 공유 중에서 id에 해당되는 것 삭제
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Successed delete share
+        401:
+          description: Invalid token
+        404:
+          description: Not found share
+        500:
+          description: Server Internal Error

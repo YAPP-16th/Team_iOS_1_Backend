@@ -16,7 +16,7 @@ export type TaskDocument = Document & {
   dueDate: Date;
 };
 
-const TaskSchema: Schema = new Schema({
+export const TaskSchema: Schema = new Schema({
   title: {
     type: String,
     required: false,
