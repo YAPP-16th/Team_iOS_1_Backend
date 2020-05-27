@@ -5,24 +5,24 @@ export type ShareDocument = Document & {
   tasks: [TaskDocument];
   senderId: String;
   createdAt: Date;
+  updatedAt: Date;
 };
 
-const ShareSchema: Schema = new Schema({
-  tasks: {
-    type: [TaskSchema],
-    required: false,
+const ShareSchema: Schema = new Schema(
+  {
+    tasks: {
+      type: [TaskSchema],
+      required: false,
+    },
+    senderId: {
+      type: String,
+      required: true,
+    },
   },
-  senderId: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    expires: 10,
-    required: false,
-    default: Date.now,
-  },
-});
+  { timestamps: true },
+);
+
+ShareSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 });
 
 const Share = model<ShareDocument>('Share', ShareSchema);
 export default Share;
