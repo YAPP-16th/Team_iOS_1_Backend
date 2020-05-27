@@ -94,6 +94,12 @@ export const sendShare = async (ctx: Context) => {
     ctx.status = 200;
     ctx.body = {
       description: 'Successed send share',
+      user: {
+        _id: user._id,
+        userId: user.userId,
+        nickname: user.nickname,
+        shareAlarmIds: user.shareAlarmIds,
+      },
       share: newShare,
     };
   } catch (e) {
@@ -168,7 +174,13 @@ export const receiveShare = async (ctx: Context) => {
   ctx.status = 200;
   ctx.body = {
     description: 'Successed receive share',
-    user,
+    user: {
+      _id: user._id,
+      userId: user.userId,
+      nickname: user.nickname,
+      tagIds: user.tagIds,
+      taskIds: user.taskIds,
+    },
   };
 };
 
