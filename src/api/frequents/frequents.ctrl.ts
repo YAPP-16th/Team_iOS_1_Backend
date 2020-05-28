@@ -190,3 +190,32 @@ export const list = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
+/* 자주가는 곳 전부 삭제
+POST /api/frequents/all
+*/
+export const removeAll = async (ctx: Context) => {
+  const { user } = ctx.state;
+  const frequentIds = user.frequentIds;
+
+  for (const frequentId of frequentIds) {
+    try {
+      await Frequent.findByIdAndRemove({ _id: frequentId });
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+  }
+
+  user.frequentIds = [];
+
+  try {
+    await user.save();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  ctx.status = 204;
+  ctx.body = {
+    description: 'Successed remove all frequent',
+  };
+};

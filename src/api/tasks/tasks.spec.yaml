@@ -2,7 +2,7 @@ paths:
   /api/tasks:
     get:
       tags:
-        - Task
+        - tasks
       parameters:
         - name: token
           in: header
@@ -10,8 +10,8 @@ paths:
           required: true
           schema:
             type: string
-      summary: Task 목록 조회
-      description: Task 목록 조회
+      summary: task 목록 조회
+      description: task 목록 조회
       produces:
         - application/json
       responses:
@@ -23,7 +23,7 @@ paths:
           description: Server Internal Error
     post:
       tags:
-        - Task
+        - tasks
       parameters:
         - name: token
           in: header
@@ -33,13 +33,13 @@ paths:
             type: string
         - name: title
           in: body
-          description: Task 제목
+          description: task 제목
           required: false
           schema:
             type: string
         - name: coordinates
           in: body
-          description: Task [위도, 경도]
+          description: task [위도, 경도]
           required: true
           schema:
             type: array
@@ -47,7 +47,7 @@ paths:
               type: number
         - name: address
           in: body
-          description: Task 주소
+          description: task 주소
           required: true
           schema:
             type: string
@@ -59,19 +59,19 @@ paths:
             type: string
         - name: memo
           in: body
-          description: Task 내용
+          description: task 내용
           required: false
           schema:
             type: string
         - name: iconURL
           in: body
-          description: Task Icon 경로
+          description: task Icon 경로
           required: false
           schema:
             type: string
         - name: isFinished
           in: body
-          description: Task 수행 여부
+          description: task 수행 여부
           required: true
           schema:
             type: boolean
@@ -89,12 +89,12 @@ paths:
             type: boolean
         - name: dueDate
           in: body
-          description: Task 달성 기한
+          description: task 달성 기한
           required: false
           schema:
             type: string
-      summary: Task 작성
-      description: Task 작성
+      summary: task 작성
+      description: task 작성
       produces:
         - application/json
       responses:
@@ -105,10 +105,34 @@ paths:
         500:
           description: Server Error
 
+    delete:
+      tags:
+        - tasks
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+      summary: tag delete API
+      description: token에 일치하는 유저의 태스크 모두 삭제
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Successed delete all task
+        401:
+          description: Invalid token
+        404:
+          description: Not found tag
+        500:
+          description: Server Internal Error
+
   /api/tasks/{id}:
     get:
       tags:
-        - Task
+        - tasks
       parameters:
         - name: token
           in: header
@@ -118,24 +142,24 @@ paths:
             type: string
         - name: id
           in: params
-          description: Task ID
+          description: task ID
           required: true
           schema:
             type: string
-      summary: 특정 Task 조회
-      description: 특정 Task 조회
+      summary: 특정 task 조회
+      description: 특정 task 조회
       produces:
         - application/json
       responses:
         200:
-          description: Successed get Task
+          description: Successed get task
         400:
           description: Bad Request 혹은 Invalid request body
         500:
           description: Server Internal Error
     patch:
       tags:
-        - Task
+        - tasks
       parameters:
         - name: token
           in: header
@@ -145,19 +169,19 @@ paths:
             type: string
         - name: id
           in: params
-          description: Task ObjectID
+          description: task ObjectID
           required: true
           schema:
             type: string
         - name: title
           in: body
-          description: Task 제목
+          description: task 제목
           required: false
           schema:
             type: string
         - name: coordinates
           in: body
-          description: Task [위도, 경도]
+          description: task [위도, 경도]
           required: true
           schema:
             type: array
@@ -165,7 +189,7 @@ paths:
               type: Number
         - name: address
           in: body
-          description: Task 주소
+          description: task 주소
           required: true
           schema:
             type: string
@@ -177,30 +201,30 @@ paths:
             type: string
         - name: memo
           in: body
-          description: Task 내용
+          description: task 내용
           required: false
           schema:
             type: string
         - name: iconURL
           in: body
-          description: Task Icon 경로
+          description: task Icon 경로
           required: false
           schema:
             type: string
         - name: isFinished
           in: body
-          description: Task 수행 여부
+          description: task 수행 여부
           required: true
           schema:
             type: boolean
         - name: dueDate
           in: body
-          description: Task 달성 기한
+          description: task 달성 기한
           required: false
           schema:
             type: string
-      summary: 특정 Task 수정
-      description: 특정 Task 수정
+      summary: 특정 task 수정
+      description: 특정 task 수정
       produces:
         - application/json
       responses:
@@ -212,7 +236,7 @@ paths:
           description: Server Internal Error
     delete:
       tags:
-        - Task
+        - tasks
       parameters:
         - name: token
           in: header
@@ -222,17 +246,17 @@ paths:
             type: string
         - name: id
           in: params
-          description: Task ObjectID
+          description: task ObjectID
           required: true
           schema:
             type: string
-      summary: 특정 Task 삭제
-      description: 특정 Task 삭제
+      summary: 특정 task 삭제
+      description: 특정 task 삭제
       produces:
         - application/json
       responses:
         204:
-          description: Successed remove Task
+          description: Successed remove task
         404:
           description: Not found task
         500:

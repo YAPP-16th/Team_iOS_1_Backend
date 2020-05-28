@@ -261,3 +261,32 @@ export const updateTask = async (ctx: Context) => {
 
   ctx.status = 204;
 };
+
+/* 태스크 전부 삭제
+POST /api/tasks/all
+*/
+export const removeAll = async (ctx: Context) => {
+  const { user } = ctx.state;
+  const taskIds = user.taskIds;
+
+  for (const taskId of taskIds) {
+    try {
+      await Task.findByIdAndRemove({ _id: taskId });
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+  }
+
+  user.taskIds = [];
+
+  try {
+    await user.save();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  ctx.status = 204;
+  ctx.body = {
+    description: 'Successed remove all task',
+  };
+};
