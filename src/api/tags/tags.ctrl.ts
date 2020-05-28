@@ -184,3 +184,32 @@ export const updateTag = async (ctx: Context) => {
 
   ctx.status = 204;
 };
+
+/* 자주가는 곳 전부 삭제
+POST /api/tags/all
+*/
+export const removeAll = async (ctx: Context) => {
+  const { user } = ctx.state;
+  const tagIds = user.tagIds;
+
+  for (const tagId of tagIds) {
+    try {
+      await Tag.findByIdAndRemove({ _id: tagId });
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+  }
+
+  user.tagIds = [];
+
+  try {
+    await user.save();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  ctx.status = 204;
+  ctx.body = {
+    description: 'Successed remove all tag',
+  };
+};

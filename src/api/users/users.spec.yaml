@@ -2,7 +2,7 @@ paths:
   /api/users/google:
     post:
       tags:
-        - User
+        - users
       parameters:
         - name: id
           in: body
@@ -22,7 +22,7 @@ paths:
           required: true
           schema:
             type: string
-      summary: User googleAuth API
+      summary: user googleAuth API
       description: |
         유저가 googleAuth login을 요청했을 때 처리하는 API
         최초로 요청을 한 user라면 서버 db에 저장.
@@ -45,7 +45,7 @@ paths:
   /api/users/naver:
     post:
       tags:
-        - User
+        - users
       parameters:
         - name: id
           in: body
@@ -65,7 +65,7 @@ paths:
           required: true
           schema:
             type: string
-      summary: User naverAuth API
+      summary: user naverAuth API
       description: |
         유저가 naverAuth login을 요청했을 때 처리하는 API
         최초로 요청을 한 user라면 서버 db에 저장.
@@ -88,7 +88,7 @@ paths:
   /api/users/kakao:
     post:
       tags:
-        - User
+        - users
       parameters:
         - name: id
           in: body
@@ -108,7 +108,7 @@ paths:
           required: true
           schema:
             type: string
-      summary: User kakaoAuth API
+      summary: user kakaoAuth API
       description: |
         유저가 kakaoAuth login을 요청했을 때 처리하는 API
         최초로 요청을 한 user라면 서버 db에 저장.
@@ -131,7 +131,7 @@ paths:
   /api/users/facebook:
     post:
       tags:
-        - User
+        - users
       parameters:
         - name: id
           in: body
@@ -151,7 +151,7 @@ paths:
           required: true
           schema:
             type: string
-      summary: User FacebookAuth API
+      summary: user FacebookAuth API
       description: |
         유저가 FacebookAuth login을 요청했을 때 처리하는 API
         최초로 요청을 한 user라면 서버 db에 저장.
@@ -174,7 +174,7 @@ paths:
   /api/users/{userId}:
     get:
       tags:
-        - User
+        - users
       parameters:
         - name: user token
           in: Header Authorization
@@ -188,7 +188,7 @@ paths:
           required: true
           schema:
             type: string
-      summary: User info API
+      summary: user info API
       description: |
         token값과 일치하는 유저 정보 반환
         Header > Authorization에 Token tokenvalue 형태로 보낼 것
@@ -206,7 +206,7 @@ paths:
 
     patch:
       tags:
-        - User
+        - users
       parameters:
         - name: user token
           in: Header Authorization
@@ -226,7 +226,7 @@ paths:
           required: true
           schema:
             type: string
-      summary: User update API
+      summary: user update API
       description: |
         token값과 일치하는 유저 정보를 수정
         Header > Authorization에 Token tokenvalue 형태로 보낼 것
@@ -244,7 +244,7 @@ paths:
 
     delete:
       tags:
-        - User
+        - users
       parameters:
         - name: userId
           in: path
@@ -258,7 +258,7 @@ paths:
           required: true
           schema:
             type: string
-      summary: User secession API
+      summary: user secession API
       description: |
         token값과 일치하는 유저 정보 회원탈퇴
         Header > Authorization에 Token tokenvalue 형태로 보낼 것

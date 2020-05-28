@@ -2,7 +2,7 @@ paths:
   /api/frequents:
     get:
       tags:
-        - Frequents
+        - frequents
       parameters:
         - name: user token
           in: Header Authorization
@@ -10,7 +10,7 @@ paths:
           required: true
           schema:
             type: string
-      summary: Frequents list API
+      summary: frequents list API
       description: token에 일치하는 유저의 자주가는 곳 리스트 반환
       produces:
         - application/json
@@ -26,7 +26,7 @@ paths:
 
     post:
       tags:
-        - Frequents
+        - frequents
       parameters:
         - name: user token
           in: Header Authorization
@@ -64,7 +64,7 @@ paths:
         201:
           description: Successed write frequent
         400:
-          description: Invalid request body 혹은 Frequents Exceeds the limit of 5
+          description: Invalid request body 혹은 frequents Exceeds the limit of 5
         401:
           description: Invalid token
         404:
@@ -72,10 +72,34 @@ paths:
         500:
           description: Server Internal Error
 
+    delete:
+      tags:
+        - frequents
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+      summary: Frequent delete API
+      description: token에 일치하는 유저의 자주가는 곳 모두 삭제
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Successed delete all frequent
+        401:
+          description: Invalid token
+        404:
+          description: Not found frequent
+        500:
+          description: Server Internal Error
+
   /api/frequents/{frequentId}:
     get:
       tags:
-        - Frequents
+        - frequents
       parameters:
         - name: user token
           in: Header Authorization
@@ -105,7 +129,7 @@ paths:
 
     patch:
       tags:
-        - Frequents
+        - frequents
       parameters:
         - name: user token
           in: Header Authorization
@@ -143,7 +167,7 @@ paths:
 
     delete:
       tags:
-        - Frequents
+        - frequents
       parameters:
         - name: user token
           in: Header Authorization

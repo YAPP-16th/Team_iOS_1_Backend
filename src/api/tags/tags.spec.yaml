@@ -68,6 +68,30 @@ paths:
         500:
           description: Server Internal Error
 
+    delete:
+      tags:
+        - tags
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+      summary: tag delete API
+      description: token에 일치하는 유저의 태그 모두 삭제
+      produces:
+        - application/json
+      responses:
+        204:
+          description: Successed delete all tag
+        401:
+          description: Invalid token
+        404:
+          description: Not found tag
+        500:
+          description: Server Internal Error
+
   /api/tags/{tagId}:
     get:
       tags:
