@@ -1,0 +1,97 @@
+paths:
+  /api/synchronizes:
+    post:
+      tags:
+        - synchronizes
+      parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
+        - name: frequents
+          in: body
+          description: 자주가는 곳 object array
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              address:
+                type: string
+              coordinates:
+                type: array
+                items:
+                  type: number
+                minItems: 2
+                maxItems: 2
+
+        - name: tags
+          in: body
+          description: 태그 object array
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              color:
+                type: string
+              creator:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                  nickname:
+                    type: string
+
+        - name: tasks
+          in: body
+          description: 태스크 object array
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              coordinates:
+                type: array
+                items:
+                  type: number
+                minItems: 2
+                maxItems: 2
+              address:
+                type: string
+              tagName:
+                type: string
+              memo:
+                type: string
+              iconURL:
+                type: string
+              isFinished:
+                type: boolean
+              isCheckedArrive:
+                type: boolean
+              isCheckedLeave:
+                type: boolean
+              createdDate:
+                type: string
+              dueDate:
+                type: string
+      summary: share add API
+      description: token값과 일치하는 유저의 local db , server db 동기화
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Successed synchronize
+        400:
+          description: Invalid request body
+        401:
+          description: Invalid token
+        404:
+          description: Not found user
+        500:
+          description: Server Internal Error
