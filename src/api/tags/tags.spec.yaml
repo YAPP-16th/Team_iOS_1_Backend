@@ -46,6 +46,12 @@ paths:
           required: true
           schema:
             type: object
+            properties:
+              userId:
+                type: string
+              nickname:
+                type: string
+
       summary: tag add API
       description: token값과 일치하는 유저에게 태그 등록
       produces:
