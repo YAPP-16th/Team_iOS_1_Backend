@@ -28,6 +28,12 @@ paths:
       tags:
         - shares
       parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
         - name: tagId
           in: body
           description: 태그 ObjectID
@@ -55,6 +61,12 @@ paths:
       tags:
         - shares
       parameters:
+        - name: user token
+          in: Header Authorization
+          description: 유저 token
+          required: true
+          schema:
+            type: string
         - name: shareId
           in: body
           description: 공유 ObjectID

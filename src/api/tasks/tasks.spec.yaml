@@ -44,7 +44,7 @@ paths:
           schema:
             type: array
             items:
-              type: Number
+              type: number
         - name: address
           in: body
           description: Task 주소

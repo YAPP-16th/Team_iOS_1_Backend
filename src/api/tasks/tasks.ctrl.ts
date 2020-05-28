@@ -88,9 +88,8 @@ export const write = async (ctx: Context) => {
   }
 
   let tagId;
-  if (ctx.request.body.tag) {
+  if (ctx.request.body.tag && ctx.request.body.tag.length !== 0) {
     tagId = mongoose.Types.ObjectId(ctx.request.body.tag);
-
     ctx.request.body = {
       ...ctx.request.body,
       tag: tagId,
