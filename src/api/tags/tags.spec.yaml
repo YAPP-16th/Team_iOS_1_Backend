@@ -68,6 +68,7 @@ paths:
         500:
           description: Server Internal Error
 
+  /api/tags/all:
     delete:
       tags:
         - tags

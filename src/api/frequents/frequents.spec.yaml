@@ -72,6 +72,7 @@ paths:
         500:
           description: Server Internal Error
 
+  /api/frequents/all:
     delete:
       tags:
         - frequents

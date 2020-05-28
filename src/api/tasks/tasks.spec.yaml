@@ -105,6 +105,7 @@ paths:
         500:
           description: Server Error
 
+  /api/tasks/all:
     delete:
       tags:
         - tasks
@@ -129,7 +130,7 @@ paths:
         500:
           description: Server Internal Error
 
-  /api/tasks/{id}:
+  /api/tasks/{taskId}:
     get:
       tags:
         - tasks
