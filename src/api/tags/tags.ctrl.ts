@@ -194,6 +194,24 @@ export const removeAll = async (ctx: Context) => {
 
   for (const tagId of tagIds) {
     try {
+      const tag = await Tag.findById({ _id: tagId }).exec();
+
+      const taskIds = tag!.taskIds;
+
+      for (const taskId of taskIds) {
+        try {
+          await Task.findByIdAndUpdate(taskId, {
+            tag: null,
+          });
+        } catch (e) {
+          ctx.throw(500, e);
+        }
+      }
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+
+    try {
       await Tag.findByIdAndRemove({ _id: tagId });
     } catch (e) {
       ctx.throw(500, e);
