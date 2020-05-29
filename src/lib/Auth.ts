@@ -53,7 +53,7 @@ class Verify{
     }
   }
 
-  async kakao (token: stirng){
+  async kakao (token: string){
     const result: any = new Promise((resolve, reject) => {
       const options = {
         url: 'https://kapi.kakao.com/v2/user/me',
@@ -105,5 +105,4 @@ class Verify{
     return req.response;
   }
 }
-
-module.exports = new Verify();
+export default new Verify();

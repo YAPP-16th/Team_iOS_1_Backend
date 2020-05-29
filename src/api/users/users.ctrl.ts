@@ -6,6 +6,7 @@ import { googleVerify } from '../../lib/googleAuth';
 import { naverVerify } from '../../lib/naverAuth';
 import { kakaoVerify } from '../../lib/kakaoAuth';
 import { facebookVerify } from '../../lib/facebookAuth';
+import  verify from '../../lib/auth';
 import Joi from 'joi';
 
 /* googleAuth 기반 회원가입
@@ -44,7 +45,7 @@ export const googleLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await googleVerify(access_token);
+  const payload = await verify.google(access_token);
 
   if (!payload) {
     ctx.status = 401;
@@ -126,7 +127,7 @@ export const naverLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await naverVerify(access_token);
+  const payload = await verify.naver(access_token);
 
   if (!payload) {
     ctx.status = 401;
@@ -208,7 +209,7 @@ export const kakaoLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await kakaoVerify(access_token);
+  const payload = await verify.kakao(access_token);
 
   if (!payload) {
     ctx.status = 401;
@@ -285,7 +286,7 @@ export const facebookLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await facebookVerify(access_token);
+  const payload = await verify.facebook(access_token);
 
   if (!payload) {
     ctx.status = 401;
