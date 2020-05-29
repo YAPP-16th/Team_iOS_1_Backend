@@ -20,12 +20,12 @@ export type UserDocument = Document & {
   shareAlarmIds: [String];
   token: String;
   joinedDate: Date;
+  auth: String;
 };
 
 const UserSchema: Schema = new Schema({
   userId: {
     type: String,
-    unique: true,
     required: true,
   },
   nickname: {
@@ -67,6 +67,10 @@ const UserSchema: Schema = new Schema({
     required: false,
     default: Date.now,
   },
+  auth: {
+    type: String,
+    required: true,
+  },
 });
 
 // static methods
@@ -78,10 +82,15 @@ UserSchema.statics.findByToken = function (token: string) {
   return this.findOne({ token });
 };
 
+UserSchema.statics.findByAuthAndEmail = function (auth: string, email: string) {
+  return this.findOne({ auth: auth, userId: email });
+}
+
 export interface UserModel extends Model<UserDocument> {
   // static methods
   findByUserId(userId: string): Promise<UserDocument>;
   findByToken(token: string): Promise<UserDocument>;
+  findByAuthAndEmail(auth:string, email: string): Promise<UserDocument>;
 }
 
 const User = model<UserDocument, UserModel>('User', UserSchema);
