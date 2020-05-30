@@ -69,7 +69,7 @@ export const kakao = async (token: string) => {
           sub: JSON.parse(body).id.toString(),
           email: JSON.parse(body).kakao_account.email,
           name: JSON.parse(body).properties.nickname,
-          picture: JSON.parse(body).properties.profile_image,
+          picture: JSON.parse(body).properties.profile_image_url,
         };
         resolve(result);
       } else {
