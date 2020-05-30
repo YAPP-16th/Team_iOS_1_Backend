@@ -10,7 +10,10 @@
     "strict": true,
     "baseUrl": "./",
     "esModuleInterop": true,
-    "experimentalDecorators": true
-  },
-  "typeRoots": ["./src/types", "./node_modules/@types"]
+    "experimentalDecorators": true,
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]
+    },
+    "typeRoots": ["./src/types", "./node_modules/@types"]
+  }
 }

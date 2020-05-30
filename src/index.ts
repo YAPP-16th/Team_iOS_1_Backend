@@ -7,12 +7,10 @@ import json from 'koa-json';
 import bodyParser from 'koa-bodyparser';
 import koaSwagger from 'koa2-swagger-ui';
 import swaggerJSDoc from 'swagger-jsdoc';
-
 import mongoose from 'mongoose';
-
-import api from './api';
 import morgan from 'koa-morgan';
 
+import api from './api';
 import { stream } from './config/winston';
 
 if (process.env.NODE_ENV === 'prod') {
