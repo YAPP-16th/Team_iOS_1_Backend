@@ -8,7 +8,7 @@ import Joi from 'joi';
 export const verifyUser = async (ctx: Context) => {
   const { auth, verifyFunction } = ctx.state;
 
-  const { id, email, access_token } = ctx.request.body;
+  const { id, email, access_token } = ctx.request.body; 
 
   try {
     const checkUser = await User.findByAuthAndEmail(auth, email);
@@ -43,6 +43,8 @@ export const verifyUser = async (ctx: Context) => {
   } = payload;
 
   if (id !== oauthId || email !== userId) {
+    console.log(id+ ' : ' + oauthId);
+    console.log(email + ' : ' + userId);
     ctx.status = 401;
     ctx.body = {
       description: 'Mismatch between access_token information and id, email',
