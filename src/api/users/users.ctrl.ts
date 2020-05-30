@@ -30,8 +30,10 @@ export const googleLogin = async (ctx: Context) => {
 
   const { id, email, access_token } = ctx.request.body;
 
+  const auth = 'google';
+
   try {
-    const checkUser = await User.findOne({ userId: email }).exec();
+    const checkUser = await User.findByAuthAndEmail(auth, email);
 
     if (checkUser) {
       ctx.status = 409;
@@ -77,6 +79,7 @@ export const googleLogin = async (ctx: Context) => {
     nickname,
     profileImageUrl,
     token,
+    auth,
   });
 
   try {
@@ -112,9 +115,11 @@ export const naverLogin = async (ctx: Context) => {
 
   const { id, email, access_token } = ctx.request.body;
 
+  const auth = 'naver';
+  
   try {
-    const checkUser = await User.findOne({ userId: email }).exec();
-
+    const checkUser = await User.findByAuthAndEmail(auth, email);
+    
     if (checkUser) {
       ctx.status = 409;
       ctx.body = {
@@ -159,6 +164,7 @@ export const naverLogin = async (ctx: Context) => {
     nickname,
     profileImageUrl,
     token,
+    auth,
   });
 
   try {
@@ -194,8 +200,10 @@ export const kakaoLogin = async (ctx: Context) => {
 
   const { id, email, access_token } = ctx.request.body;
 
+  const auth = 'kakao';
+
   try {
-    const checkUser = await User.findOne({ userId: email }).exec();
+    const checkUser = await User.findByAuthAndEmail(auth, email);
 
     if (checkUser) {
       ctx.status = 409;
@@ -236,6 +244,7 @@ export const kakaoLogin = async (ctx: Context) => {
     nickname,
     profileImageUrl,
     token,
+    auth,
   });
 
   try {
@@ -271,8 +280,10 @@ export const facebookLogin = async (ctx: Context) => {
 
   const { id, email, access_token } = ctx.request.body;
 
+  const auth = 'facebook';
+
   try {
-    const checkUser = await User.findOne({ userId: email }).exec();
+    const checkUser = await User.findByAuthAndEmail(auth, email);
 
     if (checkUser) {
       ctx.status = 409;
@@ -313,6 +324,7 @@ export const facebookLogin = async (ctx: Context) => {
     nickname,
     profileImageUrl,
     token,
+    auth,
   });
 
   try {
