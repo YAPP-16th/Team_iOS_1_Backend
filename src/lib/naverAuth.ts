@@ -13,7 +13,13 @@ export const naverVerify = async (token: string) => {
       body: string,
     ) {
       if (!error && response.statusCode == 200) {
-        resolve(JSON.parse(body));
+        const result = {
+          sub: JSON.parse(body).id,
+          userId: JSON.parse(body).email,
+          nickname: JSON.parse(body).nickname,
+          profileImageUrl: JSON.parse(body).profile_image,
+        };
+        resolve(result);
       } else {
         reject(error);
       }

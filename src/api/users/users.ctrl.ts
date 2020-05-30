@@ -2,35 +2,13 @@ import { Context } from 'koa';
 import { UserDocument } from '../../models/user';
 import User from '../../models/user';
 import { createToken } from '../../lib/token';
-import { googleVerify } from '../../lib/googleAuth';
-import { naverVerify } from '../../lib/naverAuth';
-import { kakaoVerify } from '../../lib/kakaoAuth';
-import { facebookVerify } from '../../lib/facebookAuth';
-import  * as verify from '../../lib/auth';
+import * as verify from '../../lib/auth';
 import Joi from 'joi';
 
-/* googleAuth 기반 회원가입
-POST /api/users/google
-{ id, email, access_token }
-*/
-export const googleLogin = async (ctx: Context) => {
-  const schema = Joi.object().keys({
-    id: Joi.string().required(),
-    email: Joi.string().required(),
-    access_token: Joi.string().required(),
-  });
-
-  const result = Joi.validate(ctx.request.body, schema);
-
-  if (result.error) {
-    ctx.status = 400;
-    ctx.body = result.error;
-    return;
-  }
+export const verifyUser = async (ctx: Context) => {
+  const { auth, verifyFunction } = ctx.state;
 
   const { id, email, access_token } = ctx.request.body;
-
-  const auth = 'google';
 
   try {
     const checkUser = await User.findByAuthAndEmail(auth, email);
@@ -47,7 +25,7 @@ export const googleLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const payload = await verify.google(access_token);
+  const payload = await verifyFunction(access_token);
 
   if (!payload) {
     ctx.status = 401;
@@ -58,13 +36,13 @@ export const googleLogin = async (ctx: Context) => {
   }
 
   const {
-    sub: googleId,
+    sub: oauthId,
     email: userId,
     name: nickname,
     picture: profileImageUrl,
   } = payload;
 
-  if (id !== googleId || email !== userId) {
+  if (id !== oauthId || email !== userId) {
     ctx.status = 401;
     ctx.body = {
       description: 'Mismatch between access_token information and id, email',
@@ -84,6 +62,7 @@ export const googleLogin = async (ctx: Context) => {
 
   try {
     await user.save();
+
     ctx.status = 201;
     ctx.body = {
       description: 'Successed googleAuth',
@@ -94,11 +73,11 @@ export const googleLogin = async (ctx: Context) => {
   }
 };
 
-/* naverAuth 기반 회원가입
-POST /api/users/naver
+/* googleAuth 기반 회원가입
+POST /api/users/google
 { id, email, access_token }
 */
-export const naverLogin = async (ctx: Context) => {
+export const googleLogin = async (ctx: Context, next: () => void) => {
   const schema = Joi.object().keys({
     id: Joi.string().required(),
     email: Joi.string().required(),
@@ -113,77 +92,42 @@ export const naverLogin = async (ctx: Context) => {
     return;
   }
 
-  const { id, email, access_token } = ctx.request.body;
+  ctx.state.auth = 'google';
+  ctx.state.verifyFunction = verify.google;
 
-  const auth = 'naver';
-  
-  try {
-    const checkUser = await User.findByAuthAndEmail(auth, email);
-    
-    if (checkUser) {
-      ctx.status = 409;
-      ctx.body = {
-        description: 'Already Signed up user',
-        user: checkUser,
-      };
-      return;
-    }
-  } catch (e) {
-    ctx.throw(500, e);
-  }
+  return next();
+};
 
-  const payload = await verify.naver(access_token);
-
-  if (!payload) {
-    ctx.status = 401;
-    ctx.body = {
-      description: 'Invalid access_token',
-    };
-    return;
-  }
-
-  const {
-    id: naverId,
-    email: userId,
-    name: nickname,
-    profile_image: profileImageUrl,
-  } = payload;
-
-  if (id !== naverId || email !== userId) {
-    ctx.status = 401;
-    ctx.body = {
-      description: 'Mismatch between access_token information and id, email',
-    };
-    return;
-  }
-
-  const token = await createToken(userId!);
-
-  const user: UserDocument = new User({
-    userId,
-    nickname,
-    profileImageUrl,
-    token,
-    auth,
+/* naverAuth 기반 회원가입
+POST /api/users/naver
+{ id, email, access_token }
+*/
+export const naverLogin = async (ctx: Context, next: () => void) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    email: Joi.string().required(),
+    access_token: Joi.string().required(),
   });
 
-  try {
-    await user.save();
-    ctx.status = 201;
-    ctx.body = {
-      description: 'Successed naverAuth',
-      user: user,
-    };
-  } catch (e) {
-    ctx.throw(500, e);
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
   }
+
+  ctx.state.auth = 'naver';
+  ctx.state.verifyFunction = verify.naver;
+
+  return next();
 };
 
 /* kakaoAuth 기반 회원가입
 POST /api/users/kakao
 { id, email, access_token }
 */
-export const kakaoLogin = async (ctx: Context) => {
+export const kakaoLogin = async (ctx: Context, next: () => void) => {
   const schema = Joi.object().keys({
     id: Joi.string().required(),
     email: Joi.string().required(),
@@ -198,72 +142,17 @@ export const kakaoLogin = async (ctx: Context) => {
     return;
   }
 
-  const { id, email, access_token } = ctx.request.body;
+  ctx.state.auth = 'kakao';
+  ctx.state.verifyFunction = verify.kakao;
 
-  const auth = 'kakao';
-
-  try {
-    const checkUser = await User.findByAuthAndEmail(auth, email);
-
-    if (checkUser) {
-      ctx.status = 409;
-      ctx.body = {
-        description: 'Already Signed up user',
-        user: checkUser,
-      };
-      return;
-    }
-  } catch (e) {
-    ctx.throw(500, e);
-  }
-
-  const payload = await verify.kakao(access_token);
-
-  if (!payload) {
-    ctx.status = 401;
-    ctx.body = {
-      description: 'Invalid access_token',
-    };
-    return;
-  }
-
-  const { kakaoId, userId, nickname, profileImageUrl } = payload;
-
-  if (id !== kakaoId || email !== userId) {
-    ctx.status = 401;
-    ctx.body = {
-      description: 'Mismatch between access_token information and id, email',
-    };
-    return;
-  }
-
-  const token = await createToken(userId!);
-
-  const user: UserDocument = new User({
-    userId,
-    nickname,
-    profileImageUrl,
-    token,
-    auth,
-  });
-
-  try {
-    await user.save();
-    ctx.status = 201;
-    ctx.body = {
-      description: 'Successed kakaoAuth',
-      user: user,
-    };
-  } catch (e) {
-    ctx.throw(500, e);
-  }
+  return next();
 };
 
 /* facebookAuth 기반 회원가입
 POST /api/users/facebook
 { id, email, access_token }
 */
-export const facebookLogin = async (ctx: Context) => {
+export const facebookLogin = async (ctx: Context, next: () => void) => {
   const schema = Joi.object().keys({
     id: Joi.string().required(),
     email: Joi.string().required(),
@@ -278,65 +167,10 @@ export const facebookLogin = async (ctx: Context) => {
     return;
   }
 
-  const { id, email, access_token } = ctx.request.body;
+  ctx.state.auth = 'facebook';
+  ctx.state.verifyFunction = verify.facebook;
 
-  const auth = 'facebook';
-
-  try {
-    const checkUser = await User.findByAuthAndEmail(auth, email);
-
-    if (checkUser) {
-      ctx.status = 409;
-      ctx.body = {
-        description: 'Already Signed up user',
-        user: checkUser,
-      };
-      return;
-    }
-  } catch (e) {
-    ctx.throw(500, e);
-  }
-
-  const payload = await verify.facebook(access_token);
-
-  if (!payload) {
-    ctx.status = 401;
-    ctx.body = {
-      description: 'Invalid access_token',
-    };
-    return;
-  }
-
-  const { facebookId, userId, nickname, profileImageUrl } = payload;
-
-  if (id !== facebookId || email !== userId) {
-    ctx.status = 401;
-    ctx.body = {
-      description: 'Mismatch between access_token information and id, email',
-    };
-    return;
-  }
-
-  const token = await createToken(userId!);
-
-  const user: UserDocument = new User({
-    userId,
-    nickname,
-    profileImageUrl,
-    token,
-    auth,
-  });
-
-  try {
-    await user.save();
-    ctx.status = 201;
-    ctx.body = {
-      description: 'Successed facebookAuth',
-      user: user,
-    };
-  } catch (e) {
-    ctx.throw(500, e);
-  }
+  return next();
 };
 
 /* 특정 유저 정보 조회
