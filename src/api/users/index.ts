@@ -13,24 +13,28 @@ users.get('/', usersCtrl.list);
 users.post(
   '/google',
   userRegisterLimiter,
+  usersCtrl.validCheck,
   usersCtrl.googleLogin,
   usersCtrl.verifyUser,
 );
 users.post(
   '/naver',
   userRegisterLimiter,
+  usersCtrl.validCheck,
   usersCtrl.naverLogin,
   usersCtrl.verifyUser,
 );
 users.post(
   '/kakao',
   userRegisterLimiter,
+  usersCtrl.validCheck,
   usersCtrl.kakaoLogin,
   usersCtrl.verifyUser,
 );
 users.post(
   '/facebook',
   userRegisterLimiter,
+  usersCtrl.validCheck,
   usersCtrl.facebookLogin,
   usersCtrl.verifyUser,
 );

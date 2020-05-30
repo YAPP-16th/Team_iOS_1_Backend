@@ -5,6 +5,25 @@ import { createToken } from '../../lib/token';
 import * as verify from '../../lib/Auth';
 import Joi from 'joi';
 
+export const validCheck = async (ctx: Context, next: () => void) => {
+  
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    email: Joi.string().required(),
+    access_token: Joi.string().required(),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  next();
+};
+
 export const verifyUser = async (ctx: Context) => {
   const { auth, verifyFunction } = ctx.state;
 
@@ -80,19 +99,6 @@ POST /api/users/google
 { id, email, access_token }
 */
 export const googleLogin = async (ctx: Context, next: () => void) => {
-  const schema = Joi.object().keys({
-    id: Joi.string().required(),
-    email: Joi.string().required(),
-    access_token: Joi.string().required(),
-  });
-
-  const result = Joi.validate(ctx.request.body, schema);
-
-  if (result.error) {
-    ctx.status = 400;
-    ctx.body = result.error;
-    return;
-  }
 
   ctx.state.auth = 'google';
   ctx.state.verifyFunction = verify.google;
@@ -105,19 +111,6 @@ POST /api/users/naver
 { id, email, access_token }
 */
 export const naverLogin = async (ctx: Context, next: () => void) => {
-  const schema = Joi.object().keys({
-    id: Joi.string().required(),
-    email: Joi.string().required(),
-    access_token: Joi.string().required(),
-  });
-
-  const result = Joi.validate(ctx.request.body, schema);
-
-  if (result.error) {
-    ctx.status = 400;
-    ctx.body = result.error;
-    return;
-  }
 
   ctx.state.auth = 'naver';
   ctx.state.verifyFunction = verify.naver;
@@ -130,19 +123,6 @@ POST /api/users/kakao
 { id, email, access_token }
 */
 export const kakaoLogin = async (ctx: Context, next: () => void) => {
-  const schema = Joi.object().keys({
-    id: Joi.string().required(),
-    email: Joi.string().required(),
-    access_token: Joi.string().required(),
-  });
-
-  const result = Joi.validate(ctx.request.body, schema);
-
-  if (result.error) {
-    ctx.status = 400;
-    ctx.body = result.error;
-    return;
-  }
 
   ctx.state.auth = 'kakao';
   ctx.state.verifyFunction = verify.kakao;
@@ -155,19 +135,6 @@ POST /api/users/facebook
 { id, email, access_token }
 */
 export const facebookLogin = async (ctx: Context, next: () => void) => {
-  const schema = Joi.object().keys({
-    id: Joi.string().required(),
-    email: Joi.string().required(),
-    access_token: Joi.string().required(),
-  });
-
-  const result = Joi.validate(ctx.request.body, schema);
-
-  if (result.error) {
-    ctx.status = 400;
-    ctx.body = result.error;
-    return;
-  }
 
   ctx.state.auth = 'facebook';
   ctx.state.verifyFunction = verify.facebook;
