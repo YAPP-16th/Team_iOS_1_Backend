@@ -1,10 +1,11 @@
 import request from 'request';
 import { OAuth2Client } from 'google-auth-library';
+import { string } from 'joi';
 const { CLIENT_ID } = process.env;
 const client = new OAuth2Client(CLIENT_ID);
 
 export const facebook = async (token: string) => {
-  const result : any = new Promise((resolve, reject) => {
+  const result: any = new Promise((resolve, reject) => {
     const option = {
       uri: 'https://graph.facebook.com/v7.0/me',
       qs: {
@@ -13,23 +14,25 @@ export const facebook = async (token: string) => {
       },
     };
 
-    request (option, (err, response , body) => {
-      const userInfo = JSON.parse(body);
-
-      if (!err) {
-        const info = {
-          facebookId: userInfo.id,
-          userId: userInfo.email,
-          nickname: userInfo.name,
-          profileImageUrl: userInfo.picture.data.url,
+    request.get(option, function(
+      error: any,
+      response: { statusCode: number },
+      body: string,
+      ){
+      if (!error && response.statusCode == 200) {
+        const result = {
+          sub: JSON.parse(body).id,
+          email: JSON.parse(body).email,
+          name: JSON.parse(body).name,
+          picture: JSON.parse(body).picture.data.url,
         };
-        resolve(info);
-      } else {
-        reject(err);
+        resolve(result);
+      }else{
+        reject(error);
       }
     });
   });
-
+  
   return result;
 }
 
@@ -64,10 +67,10 @@ export const kakao = async (token: string) => {
     ) {
       if (!error && response.statusCode == 200) {
         const result = {
-          kakaoId: JSON.parse(body).id.toString(),
-          userId: JSON.parse(body).kakao_account.email,
-          nickname: JSON.parse(body).properties.nickname,
-          profileImageUrl: JSON.parse(body).properties.profile_image,
+          sub: JSON.parse(body).id.toString(),
+          email: JSON.parse(body).kakao_account.email,
+          name: JSON.parse(body).properties.nickname,
+          picture: JSON.parse(body).properties.profile_image,
         };
         resolve(result);
       } else {
@@ -75,12 +78,12 @@ export const kakao = async (token: string) => {
       }
     });
   });
-  
+
   return result;
 }
 
 export const naver = async (token: string) => {
-  const req: any = await new Promise((resolve, reject) => {
+  const result: any = await new Promise((resolve, reject) => {
     const options = {
       url: 'https://openapi.naver.com/v1/nid/me',
       headers: { Authorization: 'Bearer ' + token },
@@ -92,13 +95,19 @@ export const naver = async (token: string) => {
       body: string,
     ) {
       if (!error && response.statusCode == 200) {
-        resolve(JSON.parse(body));
+        const result = {
+          sub: JSON.parse(body).response.id,
+          email: JSON.parse(body).response.email,
+          name: JSON.parse(body).response.name,
+          picture: JSON.parse(body).response.profile_image,
+        };
+        resolve(result);
       } else {
         reject(error);
       }
     });
   });
 
-  return req.response;
+  return result;
 }
 
