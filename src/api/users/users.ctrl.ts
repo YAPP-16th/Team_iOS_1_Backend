@@ -2,7 +2,7 @@ import { Context } from 'koa';
 import { UserDocument } from '../../models/user';
 import User from '../../models/user';
 import { createToken } from '../../lib/token';
-import * as verify from '../../lib/auth';
+import * as verify from '../../lib/Auth';
 import Joi from 'joi';
 
 export const verifyUser = async (ctx: Context) => {
