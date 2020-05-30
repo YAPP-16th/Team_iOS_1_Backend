@@ -61,8 +61,6 @@ export const verifyUser = async (ctx: Context) => {
   } = payload;
 
   if (id !== oauthId || email !== userId) {
-    console.log(id + ' : ' + oauthId);
-    console.log(email + ' : ' + userId);
     ctx.status = 401;
     ctx.body = {
       description: 'Mismatch between access_token information and id, email',
