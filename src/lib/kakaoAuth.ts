@@ -14,7 +14,7 @@ export const kakaoVerify = async (token: string) => {
     ) {
       if (!error && response.statusCode == 200) {
         const result = {
-          kakaoId: JSON.parse(body).id.toString(),
+          sub: JSON.parse(body).id.toString(),
           userId: JSON.parse(body).kakao_account.email,
           nickname: JSON.parse(body).properties.nickname,
           profileImageUrl: JSON.parse(body).properties.profile_image,
@@ -25,6 +25,6 @@ export const kakaoVerify = async (token: string) => {
       }
     });
   });
-  
+
   return result;
 };
