@@ -6,7 +6,6 @@ import * as verify from '../../lib/Auth';
 import Joi from 'joi';
 
 export const validCheck = async (ctx: Context, next: () => void) => {
-  
   const schema = Joi.object().keys({
     id: Joi.string().required(),
     email: Joi.string().required(),
@@ -21,13 +20,13 @@ export const validCheck = async (ctx: Context, next: () => void) => {
     return;
   }
 
-  next();
+  return next();
 };
 
 export const verifyUser = async (ctx: Context) => {
   const { auth, verifyFunction } = ctx.state;
 
-  const { id, email, access_token } = ctx.request.body; 
+  const { id, email, access_token } = ctx.request.body;
 
   try {
     const checkUser = await User.findByAuthAndEmail(auth, email);
@@ -62,7 +61,7 @@ export const verifyUser = async (ctx: Context) => {
   } = payload;
 
   if (id !== oauthId || email !== userId) {
-    console.log(id+ ' : ' + oauthId);
+    console.log(id + ' : ' + oauthId);
     console.log(email + ' : ' + userId);
     ctx.status = 401;
     ctx.body = {
@@ -99,7 +98,6 @@ POST /api/users/google
 { id, email, access_token }
 */
 export const googleLogin = async (ctx: Context, next: () => void) => {
-
   ctx.state.auth = 'google';
   ctx.state.verifyFunction = verify.google;
 
@@ -111,7 +109,6 @@ POST /api/users/naver
 { id, email, access_token }
 */
 export const naverLogin = async (ctx: Context, next: () => void) => {
-
   ctx.state.auth = 'naver';
   ctx.state.verifyFunction = verify.naver;
 
@@ -123,7 +120,6 @@ POST /api/users/kakao
 { id, email, access_token }
 */
 export const kakaoLogin = async (ctx: Context, next: () => void) => {
-
   ctx.state.auth = 'kakao';
   ctx.state.verifyFunction = verify.kakao;
 
@@ -135,7 +131,6 @@ POST /api/users/facebook
 { id, email, access_token }
 */
 export const facebookLogin = async (ctx: Context, next: () => void) => {
-
   ctx.state.auth = 'facebook';
   ctx.state.verifyFunction = verify.facebook;
 
