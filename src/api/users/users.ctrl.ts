@@ -6,7 +6,7 @@ import { googleVerify } from '../../lib/googleAuth';
 import { naverVerify } from '../../lib/naverAuth';
 import { kakaoVerify } from '../../lib/kakaoAuth';
 import { facebookVerify } from '../../lib/facebookAuth';
-import  verify from '../../lib/auth';
+import  * as verify from '../../lib/auth';
 import Joi from 'joi';
 
 /* googleAuth 기반 회원가입
