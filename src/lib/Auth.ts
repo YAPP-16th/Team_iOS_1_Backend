@@ -1,6 +1,5 @@
 import request from 'request';
 import { OAuth2Client } from 'google-auth-library';
-import { string } from 'joi';
 const { CLIENT_ID } = process.env;
 const client = new OAuth2Client(CLIENT_ID);
 
