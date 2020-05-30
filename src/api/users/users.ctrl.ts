@@ -83,7 +83,7 @@ export const verifyUser = async (ctx: Context) => {
 
     ctx.status = 201;
     ctx.body = {
-      description: 'Successed googleAuth',
+      description: `Successed ${auth}Auth`,
       user: user,
     };
   } catch (e) {
