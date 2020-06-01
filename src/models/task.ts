@@ -11,10 +11,11 @@ export type TaskDocument = Document & {
   isFinished: Boolean;
   isCheckedArrive: Boolean;
   isCheckedLeave: Boolean;
+  isCheckedDueDate: Boolean;
   arriveMessage: String;
   leaveMessage: String;
-  createdDate: Date;
-  dueDate: Date;
+  createdDate: String;
+  dueDate: String;
 };
 
 export const TaskSchema: Schema = new Schema({
@@ -55,6 +56,10 @@ export const TaskSchema: Schema = new Schema({
     type: Boolean,
     required: true,
   },
+  isCheckedDueDate: {
+    type: Boolean,
+    required: true,
+  },
   arriveMessage: {
     type: String,
     required: false,
@@ -66,12 +71,11 @@ export const TaskSchema: Schema = new Schema({
     default: '',
   },
   createdDate: {
-    type: Date,
-    required: false,
-    default: Date.now,
+    type: String,
+    required: true,
   },
   dueDate: {
-    type: Date,
+    type: String,
     required: false,
     default: '',
   },
