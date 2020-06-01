@@ -62,7 +62,10 @@ export const taskInfo = async (ctx: Context) => {
 
 /* 특정 Task 작성
 POST /api/tasks
-{ title, coordinates, address, tag, memo, iconURL, isFinished, isCheckedArrive, isCheckedLeave, createdDate, dueDate }
+{ title, coordinates, address, tag, iconURL, 
+  isFinished, isCheckedArrive, isCheckedLeave, 
+  arriveMessage, leaveMessage,
+  createdDate, dueDate }
 */
 export const write = async (ctx: Context) => {
   const schema = Joi.object().keys({
@@ -70,11 +73,12 @@ export const write = async (ctx: Context) => {
     coordinates: Joi.array().items(Joi.number()).required(),
     address: Joi.string().required(),
     tag: Joi.string().allow(''),
-    memo: Joi.string().allow(''),
     iconURL: Joi.string().allow(''),
     isFinished: Joi.boolean(),
     isCheckedArrive: Joi.boolean().required(),
     isCheckedLeave: Joi.boolean().required(),
+    arriveMessage: Joi.string().allow(''),
+    leaveMessage: Joi.string().allow(''),
     createdDate: Joi.date(),
     dueDate: Joi.date(),
   });
@@ -184,11 +188,12 @@ export const updateTask = async (ctx: Context) => {
     coordinates: Joi.array().items(Joi.number()),
     address: Joi.string().allow(''),
     tag: Joi.string().allow(''),
-    memo: Joi.string().allow(''),
     iconURL: Joi.string().allow(''),
     isFinished: Joi.boolean(),
     isCheckedArrive: Joi.boolean(),
     isCheckedLeave: Joi.boolean(),
+    arriveMessage: Joi.string().allow(''),
+    leaveMessage: Joi.string().allow(''),
     createdDate: Joi.date(),
     dueDate: Joi.date(),
   });
