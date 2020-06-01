@@ -57,11 +57,13 @@ export const TaskSchema: Schema = new Schema({
   },
   arriveMessage: {
     type: String,
-    required: true,
+    required: false,
+    default: '',
   },
   leaveMessage: {
     type: String,
-    required: true,
+    required: false,
+    default: '',
   },
   createdDate: {
     type: Date,
