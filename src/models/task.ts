@@ -7,11 +7,12 @@ export type TaskDocument = Document & {
   coordinates: [Number, Number];
   address: String;
   tag: String;
-  memo: String;
   iconURL: String;
   isFinished: Boolean;
   isCheckedArrive: Boolean;
   isCheckedLeave: Boolean;
+  arriveMessage: String;
+  leaveMessage: String;
   createdDate: Date;
   dueDate: Date;
 };
@@ -36,11 +37,6 @@ export const TaskSchema: Schema = new Schema({
     required: false,
     default: null,
   },
-  memo: {
-    type: String,
-    required: false,
-    default: '',
-  },
   iconURL: {
     type: String,
     required: false,
@@ -58,6 +54,16 @@ export const TaskSchema: Schema = new Schema({
   isCheckedLeave: {
     type: Boolean,
     required: true,
+  },
+  arriveMessage: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  leaveMessage: {
+    type: String,
+    required: false,
+    default: '',
   },
   createdDate: {
     type: Date,

@@ -57,12 +57,6 @@ paths:
           required: false
           schema:
             type: string
-        - name: memo
-          in: body
-          description: task 내용
-          required: false
-          schema:
-            type: string
         - name: iconURL
           in: body
           description: task Icon 경로
@@ -87,6 +81,18 @@ paths:
           required: true
           schema:
             type: boolean
+        - name: arriveMessage
+          in: body
+          description: 도착할 때 메세지
+          required: true
+          schema:
+            type: string
+        - name: leaveMessage
+          in: body
+          description: 떠날 때 메세지
+          required: true
+          schema:
+            type: string
         - name: dueDate
           in: body
           description: task 달성 기한
@@ -200,12 +206,6 @@ paths:
           required: false
           schema:
             type: string
-        - name: memo
-          in: body
-          description: task 내용
-          required: false
-          schema:
-            type: string
         - name: iconURL
           in: body
           description: task Icon 경로
@@ -218,6 +218,30 @@ paths:
           required: true
           schema:
             type: boolean
+        - name: isCheckedArrive
+          in: body
+          description: 도착할 때 알림 여부
+          required: true
+          schema:
+            type: boolean
+        - name: isCheckedLeave
+          in: body
+          description: 떠날 때 알림 여부
+          required: true
+          schema:
+            type: boolean
+        - name: arriveMessage
+          in: body
+          description: 도착할 때 메세지
+          required: true
+          schema:
+            type: string
+        - name: leaveMessage
+          in: body
+          description: 떠날 때 메세지
+          required: true
+          schema:
+            type: string
         - name: dueDate
           in: body
           description: task 달성 기한
