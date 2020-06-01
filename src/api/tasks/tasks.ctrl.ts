@@ -63,7 +63,7 @@ export const taskInfo = async (ctx: Context) => {
 /* 특정 Task 작성
 POST /api/tasks
 { title, coordinates, address, tag, iconURL, 
-  isFinished, isCheckedArrive, isCheckedLeave, 
+  isFinished, isCheckedArrive, isCheckedLeave, isCheckedDueDate
   arriveMessage, leaveMessage,
   createdDate, dueDate }
 */
@@ -77,10 +77,11 @@ export const write = async (ctx: Context) => {
     isFinished: Joi.boolean(),
     isCheckedArrive: Joi.boolean().required(),
     isCheckedLeave: Joi.boolean().required(),
+    isCheckedDueDate: Joi.boolean().required(),
     arriveMessage: Joi.string().allow(''),
     leaveMessage: Joi.string().allow(''),
-    createdDate: Joi.date(),
-    dueDate: Joi.date(),
+    createdDate: Joi.string().required(),
+    dueDate: Joi.string().allow(''),
   });
 
   const result = Joi.validate(ctx.request.body, schema);
@@ -192,10 +193,11 @@ export const updateTask = async (ctx: Context) => {
     isFinished: Joi.boolean(),
     isCheckedArrive: Joi.boolean(),
     isCheckedLeave: Joi.boolean(),
+    isCheckedDueDate: Joi.boolean(),
     arriveMessage: Joi.string().allow(''),
     leaveMessage: Joi.string().allow(''),
-    createdDate: Joi.date(),
-    dueDate: Joi.date(),
+    createdDate: Joi.string(),
+    dueDate: Joi.string(),
   });
 
   const result = Joi.validate(ctx.request.body, schema);

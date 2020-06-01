@@ -31,6 +31,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: id
+          in: params
+          description: task ObjectID
+          required: true
+          schema:
+            type: string
         - name: title
           in: body
           description: task 제목
@@ -44,7 +50,7 @@ paths:
           schema:
             type: array
             items:
-              type: number
+              type: Number
         - name: address
           in: body
           description: task 주소
@@ -81,6 +87,12 @@ paths:
           required: true
           schema:
             type: boolean
+        - name: isCheckedDueDate
+          in: body
+          description: 마감기한 on/off 여부
+          required: true
+          schema:
+            type: boolean
         - name: arriveMessage
           in: body
           description: 도착할 때 메세지
@@ -90,6 +102,12 @@ paths:
         - name: leaveMessage
           in: body
           description: 떠날 때 메세지
+          required: true
+          schema:
+            type: string
+        - name: createdDate
+          in: body
+          description: task 생성 날짜
           required: true
           schema:
             type: string
@@ -230,6 +248,12 @@ paths:
           required: true
           schema:
             type: boolean
+        - name: isCheckedDueDate
+          in: body
+          description: 마감기한 on/off 여부
+          required: true
+          schema:
+            type: boolean
         - name: arriveMessage
           in: body
           description: 도착할 때 메세지
@@ -239,6 +263,12 @@ paths:
         - name: leaveMessage
           in: body
           description: 떠날 때 메세지
+          required: true
+          schema:
+            type: string
+        - name: createdDate
+          in: body
+          description: task 생성 날짜
           required: true
           schema:
             type: string

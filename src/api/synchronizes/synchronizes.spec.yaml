@@ -66,8 +66,6 @@ paths:
                 type: string
               tagName:
                 type: string
-              memo:
-                type: string
               iconURL:
                 type: string
               isFinished:
@@ -76,6 +74,12 @@ paths:
                 type: boolean
               isCheckedLeave:
                 type: boolean
+              isCheckedDueDate:
+                type: boolean
+              arriveMessage:
+                type: string
+              leaveMessage:
+                type: string
               createdDate:
                 type: string
               dueDate:
