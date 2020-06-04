@@ -81,7 +81,7 @@ paths:
           required: true
           schema:
             type: boolean
-        - name: isCheckedLeave
+        - name: isCheckedDeparture
           in: body
           description: 떠날 때 알림 여부
           required: true
@@ -93,13 +93,25 @@ paths:
           required: true
           schema:
             type: boolean
+        - name: isReadyArrive
+          in: body
+          description: 도착할 때 알림 상태값
+          required: true
+          schema:
+            type: boolean
+        - name: isReadyDeparture
+          in: body
+          description: 떠날 때 알림 상태값
+          required: true
+          schema:
+            type: boolean
         - name: arriveMessage
           in: body
           description: 도착할 때 메세지
           required: true
           schema:
             type: string
-        - name: leaveMessage
+        - name: departureMessage
           in: body
           description: 떠날 때 메세지
           required: true
@@ -242,7 +254,7 @@ paths:
           required: true
           schema:
             type: boolean
-        - name: isCheckedLeave
+        - name: isCheckedDeparture
           in: body
           description: 떠날 때 알림 여부
           required: true
@@ -260,7 +272,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: leaveMessage
+        - name: departureMessage
           in: body
           description: 떠날 때 메세지
           required: true

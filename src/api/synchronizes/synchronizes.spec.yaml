@@ -72,13 +72,17 @@ paths:
                 type: boolean
               isCheckedArrive:
                 type: boolean
-              isCheckedLeave:
+              isCheckedDeparture:
                 type: boolean
               isCheckedDueDate:
                 type: boolean
+              isReadyArrive:
+                type: boolean
+              isReadyDeparture:
+                type: boolean
               arriveMessage:
                 type: string
-              leaveMessage:
+              departureMessage:
                 type: string
               createdDate:
                 type: string
