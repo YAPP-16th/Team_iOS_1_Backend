@@ -143,6 +143,12 @@ export const synchronize = async (ctx: Context) => {
 
     if (foundTag) {
       foundTag.taskIds.push(newTask._id);
+
+      try {
+        await foundTag.save();
+      } catch (e) {
+        ctx.throw(500, e);
+      }
     }
 
     try {
