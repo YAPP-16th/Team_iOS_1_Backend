@@ -63,8 +63,8 @@ export const taskInfo = async (ctx: Context) => {
 /* 특정 Task 작성
 POST /api/tasks
 { title, coordinates, address, tag, iconURL, 
-  isFinished, isCheckedArrive, isCheckedLeave, isCheckedDueDate
-  arriveMessage, leaveMessage,
+  isFinished, isCheckedArrive, isCheckedDeparture, isCheckedDueDate
+  arriveMessage, departureMessage,
   createdDate, dueDate }
 */
 export const write = async (ctx: Context) => {
@@ -76,10 +76,12 @@ export const write = async (ctx: Context) => {
     iconURL: Joi.string().allow(''),
     isFinished: Joi.boolean(),
     isCheckedArrive: Joi.boolean().required(),
-    isCheckedLeave: Joi.boolean().required(),
+    isCheckedDeparture: Joi.boolean().required(),
     isCheckedDueDate: Joi.boolean().required(),
+    isReadyArrive: Joi.boolean().required(),
+    isReadyDeparture: Joi.boolean().required(),
     arriveMessage: Joi.string().allow(''),
-    leaveMessage: Joi.string().allow(''),
+    departureMessage: Joi.string().allow(''),
     createdDate: Joi.string().required(),
     dueDate: Joi.string().allow(''),
   });
@@ -192,10 +194,12 @@ export const updateTask = async (ctx: Context) => {
     iconURL: Joi.string().allow(''),
     isFinished: Joi.boolean(),
     isCheckedArrive: Joi.boolean(),
-    isCheckedLeave: Joi.boolean(),
+    isCheckedDeparture: Joi.boolean(),
     isCheckedDueDate: Joi.boolean(),
+    isReadyArrive: Joi.boolean(),
+    isReadyDeparture: Joi.boolean(),
     arriveMessage: Joi.string().allow(''),
-    leaveMessage: Joi.string().allow(''),
+    departureMessage: Joi.string().allow(''),
     createdDate: Joi.string(),
     dueDate: Joi.string(),
   });
