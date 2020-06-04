@@ -31,12 +31,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: id
-          in: params
-          description: task ObjectID
-          required: true
-          schema:
-            type: string
         - name: title
           in: body
           description: task 제목
