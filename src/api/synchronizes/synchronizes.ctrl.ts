@@ -109,27 +109,40 @@ export const synchronize = async (ctx: Context) => {
   }
 
   for (const task of tasks) {
-    const foundedTag = tagsArray.find((tag) => tag.name == task.tagName);
-
     let newTaskObject;
-    if (foundedTag) {
-      const foundedTagObjectId = mongoose.Types.ObjectId(foundedTag._id);
+    let foundTag;
 
-      newTaskObject = {
-        ...task,
-        tag: foundedTagObjectId,
-      };
-    } else {
+    if (!task.tagName) {
       newTaskObject = {
         ...task,
         tag: null,
       };
+    } else {
+      const userTagsArray = await Tag.find({
+        _id: { $in: user.tagIds },
+      }).exec();
+      foundTag = userTagsArray.find((tag) => tag.name == task.tagName);
+
+      if (foundTag) {
+        const foundTagObjectId = mongoose.Types.ObjectId(foundTag._id);
+
+        newTaskObject = {
+          ...task,
+          tag: foundTagObjectId,
+        };
+      } else {
+        ctx.status = 404;
+        ctx.body = {
+          description: 'Not found tag',
+        };
+        return;
+      }
     }
 
     const newTask = new Task(newTaskObject);
 
-    if (foundedTag) {
-      foundedTag.taskIds.push(newTask._id);
+    if (foundTag) {
+      foundTag.taskIds.push(newTask._id);
     }
 
     try {
