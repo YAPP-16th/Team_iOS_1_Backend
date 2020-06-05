@@ -154,7 +154,7 @@ export const appleLogin = async (ctx: Context) => {
     return;
   }
 
-  const { id: userId, email, nickname } = ctx.request.body;
+  const { id, email, nickname } = ctx.request.body;
 
   const auth = 'apple';
 
@@ -173,10 +173,10 @@ export const appleLogin = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 
-  const token = await createToken(userId!);
+  const token = await createToken(email!);
 
   const user: UserDocument = new User({
-    userId,
+    userId: email,
     nickname,
     token,
     auth,
