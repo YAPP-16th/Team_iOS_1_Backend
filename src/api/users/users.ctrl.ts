@@ -135,6 +135,66 @@ export const facebookLogin = async (ctx: Context, next: () => void) => {
   return next();
 };
 
+/* appleAuth 기반 회원가입
+POST /api/users/apple
+{ id, email, nickname }
+*/
+export const appleLogin = async (ctx: Context) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    email: Joi.string().required(),
+    nickname: Joi.string().required(),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  const { id, email, nickname } = ctx.request.body;
+
+  const auth = 'apple';
+
+  try {
+    const checkUser = await User.findByAuthAndEmail(auth, email);
+
+    if (checkUser) {
+      ctx.status = 409;
+      ctx.body = {
+        description: 'Already Signed up user',
+        user: checkUser,
+      };
+      return;
+    }
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  const token = await createToken(email!);
+
+  const user: UserDocument = new User({
+    userId: email,
+    nickname,
+    token,
+    auth,
+  });
+
+  try {
+    await user.save();
+
+    ctx.status = 201;
+    ctx.body = {
+      description: `Successed ${auth}Auth`,
+      user: user,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
 /* 특정 유저 정보 조회
 GET /api/users/:userId
 */
