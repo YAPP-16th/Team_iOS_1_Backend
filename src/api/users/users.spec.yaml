@@ -171,6 +171,47 @@ paths:
         500:
           description: Server Internal Error
 
+  /api/users/apple:
+    post:
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: body
+          description: 유저 Apple 고유 id
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: body
+          description: 유저 Apple 이메일 주소
+          required: true
+          schema:
+            type: string
+        - name: nickname
+          in: body
+          description: 유저 Apple nickname
+          required: true
+          schema:
+            type: string
+      summary: user AppleAuth API
+      description: |
+        유저가 AppleAuth login을 요청했을 때 처리하는 API
+        최초로 요청을 한 user라면 서버 db에 저장.
+        만약, 이미 저장되어 있는 user라면 pass.
+        response는 user 정보 + 서버에서 할당한 token.
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Successed AppleAuth
+        400:
+          description: Bad Request
+        409:
+          description: Already Signed up user
+        500:
+          description: Server Internal Error
+
   /api/users/{userId}:
     get:
       tags:

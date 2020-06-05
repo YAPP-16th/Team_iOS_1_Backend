@@ -38,6 +38,7 @@ users.post(
   usersCtrl.facebookLogin,
   usersCtrl.verifyUser,
 );
+users.post('/apple', userRegisterLimiter, usersCtrl.appleLogin);
 
 const user = new Router();
 user.get('/', usersCtrl.userInfo);
