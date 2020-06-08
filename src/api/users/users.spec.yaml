@@ -200,6 +200,14 @@ paths:
         최초로 요청을 한 user라면 서버 db에 저장.
         만약, 이미 저장되어 있는 user라면 pass.
         response는 user 정보 + 서버에서 할당한 token.
+
+        만약, 이미 최초 로그인을 했던 user라면, 
+        {
+            "id" : Apple 고유 id,
+            "email" : "",
+            "nickname" : "",
+        }
+        의 형태로 email, nickname은 빈 string으로 보낼 것.
       produces:
         - application/json
       responses:

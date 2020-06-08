@@ -10,6 +10,7 @@ const arrayLimit = (frequents: Array<FrequentDocument>) => {
 };
 
 export type UserDocument = Document & {
+  oauthId: String;
   userId: String;
   nickname: String;
   profileImageUrl: String;
@@ -24,6 +25,10 @@ export type UserDocument = Document & {
 };
 
 const UserSchema: Schema = new Schema({
+  oauthId: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: String,
     required: true,
@@ -78,19 +83,24 @@ UserSchema.statics.findByUserId = function (userId: string) {
   return this.findOne({ userId });
 };
 
+UserSchema.statics.findByOauthId = function (oauthId: string) {
+  return this.findOne({ oauthId });
+};
+
 UserSchema.statics.findByToken = function (token: string) {
   return this.findOne({ token });
 };
 
 UserSchema.statics.findByAuthAndEmail = function (auth: string, email: string) {
   return this.findOne({ auth: auth, userId: email });
-}
+};
 
 export interface UserModel extends Model<UserDocument> {
   // static methods
   findByUserId(userId: string): Promise<UserDocument>;
+  findByOauthId(userId: string): Promise<UserDocument>;
   findByToken(token: string): Promise<UserDocument>;
-  findByAuthAndEmail(auth:string, email: string): Promise<UserDocument>;
+  findByAuthAndEmail(auth: string, email: string): Promise<UserDocument>;
 }
 
 const User = model<UserDocument, UserModel>('User', UserSchema);
