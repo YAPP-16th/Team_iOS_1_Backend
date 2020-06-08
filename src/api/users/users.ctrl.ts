@@ -71,6 +71,7 @@ export const verifyUser = async (ctx: Context) => {
   const token = await createToken(userId!);
 
   const user: UserDocument = new User({
+    oauthId,
     userId,
     nickname,
     profileImageUrl,
@@ -142,8 +143,8 @@ POST /api/users/apple
 export const appleLogin = async (ctx: Context) => {
   const schema = Joi.object().keys({
     id: Joi.string().required(),
-    email: Joi.string().required(),
-    nickname: Joi.string().required(),
+    email: Joi.string().required().allow(''),
+    nickname: Joi.string().required().allow(''),
   });
 
   const result = Joi.validate(ctx.request.body, schema);
@@ -159,7 +160,12 @@ export const appleLogin = async (ctx: Context) => {
   const auth = 'apple';
 
   try {
-    const checkUser = await User.findByAuthAndEmail(auth, email);
+    let checkUser;
+    if (email == '' && nickname == '') {
+      checkUser = await User.findByOauthId(id);
+    } else {
+      checkUser = await User.findByAuthAndEmail(auth, email);
+    }
 
     if (checkUser) {
       ctx.status = 409;
@@ -176,6 +182,7 @@ export const appleLogin = async (ctx: Context) => {
   const token = await createToken(email!);
 
   const user: UserDocument = new User({
+    oauthId: id,
     userId: email,
     nickname,
     token,
